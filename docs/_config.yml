@@ -18,10 +18,10 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Planner Tool
+title: Bozio Chores Tracking
 email: ryan.bozio@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Planning Tool for maximizing productivity!
+  Ticket Tracking for the Bozios
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: bozio_ryan
@@ -31,6 +31,12 @@ github_username:  ryanbozio
 theme: minima
 plugins:
   - jekyll-feed
+
+# Explicit nav so the parent-only admin page doesn't show up in the header (still reachable via a direct link).
+header_pages:
+  - about.markdown
+  - tasks.markdown
+  - tickets.markdown
 
 # Exclude from processing.
 # The following items will not be processed, by default.

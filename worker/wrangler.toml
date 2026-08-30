@@ -1,0 +1,13 @@
+name = "ticket-tracker"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+# Set these for your fork/repo, then deploy.
+[vars]
+GITHUB_REPO = "ryanbozio/BozioStore"
+GITHUB_BRANCH = "main"
+ALLOWED_ORIGIN = "https://ryanbozio.github.io"
+
+# Secrets (do not put these here) — set with:
+#   wrangler secret put GITHUB_TOKEN
+#   wrangler secret put ADMIN_PASSWORD
