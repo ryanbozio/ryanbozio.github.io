@@ -1,6 +1,8 @@
 // Cloudflare Worker: receives admin actions from the static ticket-tracker pages and
 // writes them to CSV files in the GitHub repo via the Contents API (which auto-commits).
 
+const ADMIN_PASSWORD = "Boziofam19!";
+
 function corsHeaders(env) {
   return {
     "Access-Control-Allow-Origin": env.ALLOWED_ORIGIN || "*",
@@ -149,7 +151,7 @@ export default {
     }
 
     const { password, action, payload } = body || {};
-    if (!env.ADMIN_PASSWORD || !timingSafeEqual(String(password || ""), env.ADMIN_PASSWORD)) {
+    if (!timingSafeEqual(String(password || ""), ADMIN_PASSWORD)) {
       return json({ error: "Unauthorized" }, 401, env);
     }
     if (!action || typeof payload !== "object") {
