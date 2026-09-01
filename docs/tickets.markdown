@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Tickets
+title: Summary
 permalink: /tickets/
 ---
 

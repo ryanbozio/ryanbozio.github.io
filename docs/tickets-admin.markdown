@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Chore Store Admin
+title: Admin
 permalink: /tickets/admin/
 ---
 
