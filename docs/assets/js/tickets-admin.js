@@ -52,6 +52,13 @@ function newId() {
   return crypto.randomUUID().slice(0, 8);
 }
 
+function pendingRedemptions(ledger, childId) {
+  const usedRedemptionIds = new Set(
+    ledger.filter((entry) => entry.type === "redemption_used").map((entry) => entry.description)
+  );
+  return ledger.filter((entry) => entry.child_id === childId && entry.type === "redemption" && !usedRedemptionIds.has(entry.id));
+}
+
 async function appendCsvRow(path, fields, message) {
   if (!githubToken) throw new Error("Sign in with GitHub before making changes.");
   for (let attempt = 0; attempt < 3; attempt++) {
@@ -84,10 +91,12 @@ async function saveAction(action, payload) {
       break;
     case "log_chore":
     case "adjustment":
-    case "redeem": {
+    case "redeem":
+    case "use_redemption": {
       const points = action === "redeem" ? -Math.abs(payload.cost) : payload.points;
-      const description = action === "adjustment" ? payload.reason : payload.description;
-      await appendCsvRow("docs/data/ledger.csv", [newId(), new Date().toISOString(), payload.childId, action === "log_chore" ? "chore" : action === "redeem" ? "redemption" : "adjustment", description, points], `Ticket ${action}: ${description}`);
+      const description = action === "adjustment" ? payload.reason : action === "use_redemption" ? payload.redemptionId : payload.description;
+      const type = action === "log_chore" ? "chore" : action === "redeem" ? "redemption" : action === "use_redemption" ? "redemption_used" : "adjustment";
+      await appendCsvRow("docs/data/ledger.csv", [newId(), new Date().toISOString(), payload.childId, type, description, points || 0], `Ticket ${action}: ${description}`);
       break;
     }
     default:
@@ -142,10 +151,22 @@ function renderAll() {
   const cardsEl = document.getElementById("ticketCards");
   cardsEl.innerHTML = children
     .map(
-      (c) =>
-        `<div class="ticket-card" style="border-top-color:${c.color || "#4a90d9"}"><h3>${escapeHtml(c.name)}</h3><p class="ticket-balance">${balances[c.id] || 0} 🎟️</p></div>`
+      (c) => {
+        const prizes = pendingRedemptions(ledger, c.id);
+        const prizeList = prizes.length
+          ? `<ul class="ticket-prizes">${prizes.map((prize) => `<li><span>${escapeHtml(prize.description)}</span><button type="button" class="ticket-use-prize" data-child-id="${escapeHtml(c.id)}" data-redemption-id="${escapeHtml(prize.id)}">Use</button></li>`).join("")}</ul>`
+          : "";
+        return `<div class="ticket-card" style="border-top-color:${c.color || "#4a90d9"}"><h3>${escapeHtml(c.name)}</h3><p class="ticket-balance">${balances[c.id] || 0} 🎟️</p>${prizeList}</div>`;
+      }
     )
     .join("") || "<p>No kids added yet.</p>";
+
+  cardsEl.querySelectorAll(".ticket-use-prize").forEach((button) => {
+    button.addEventListener("click", () => {
+      button.disabled = true;
+      submitAction("use_redemption", { childId: button.dataset.childId, redemptionId: button.dataset.redemptionId });
+    });
+  });
 
   fillSelect(document.getElementById("logChoreChild"), children, (c) => c.name);
   fillSelect(document.getElementById("adjustmentChild"), children, (c) => c.name);

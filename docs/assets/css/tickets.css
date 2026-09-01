@@ -10,6 +10,9 @@
 }
 .ticket-card h3 { margin: 0 0 0.25rem; font-size: 1.1rem; }
 .ticket-balance { font-size: 1.75rem; font-weight: bold; margin: 0; }
+.ticket-prizes { list-style: none; margin: 0.8rem 0 0; padding: 0; }
+.ticket-prizes li { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #eee; }
+.ticket-prizes button { padding: 0.25rem 0.5rem; }
 .ticket-history { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; }
 .ticket-history th, .ticket-history td { padding: 0.5rem 0.75rem; border-bottom: 1px solid #eee; text-align: left; font-size: 0.9rem; }
 .ticket-positive { color: #1a7f37; font-weight: bold; }
