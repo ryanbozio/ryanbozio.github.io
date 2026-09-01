@@ -27,3 +27,5 @@
 .ticket-status.ticket-status-visible { display: block; }
 .ticket-status.ticket-status-error { background: #fdecea; border: 1px solid #f5c6cb; color: #c0392b; }
 .ticket-status.ticket-status-success { background: #eafaf1; border: 1px solid #c3e6cb; color: #1a7f37; }
+.ticket-auth { display: flex; align-items: center; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 0.75rem; }
+.ticket-auth button[hidden] { display: none; }

@@ -9,9 +9,10 @@ permalink: /tickets/admin/
 # Parent Admin
 
 <div class="ticket-app">
-  <div class="ticket-stack" style="max-width: 320px;">
-    <label for="parentPassword">Parent password</label>
-    <input id="parentPassword" type="password" placeholder="Enter password">
+  <div class="ticket-auth">
+    <button id="githubSignIn" type="button">Sign in with GitHub</button>
+    <button id="githubSignOut" type="button" hidden>Sign out</button>
+    <span id="githubIdentity"></span>
   </div>
 
   <div id="ticketStatus" class="ticket-status"></div>
@@ -98,7 +99,8 @@ permalink: /tickets/admin/
 
 <script src="{{ '/assets/js/tickets-common.js' | relative_url }}"></script>
 <script>
-  // Set this to your deployed Cloudflare Worker URL after running `wrangler deploy`.
-  const TICKET_WORKER_URL = "https://ticket-tracker.YOUR-SUBDOMAIN.workers.dev";
+  const GITHUB_OAUTH_CLIENT_ID = "Ov23liJwfR7yDdPpJV4F";
+  const GITHUB_REPOSITORY = "ryanbozio/ryanbozio.github.io";
+  const GITHUB_BRANCH = "main";
 </script>
 <script src="{{ '/assets/js/tickets-admin.js' | relative_url }}"></script>
