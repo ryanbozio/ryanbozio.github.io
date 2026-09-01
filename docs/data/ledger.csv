@@ -1,2 +1,3 @@
 id,timestamp,child_id,type,description,points
 cd3bf6ef,2026-09-01T20:12:41.119Z,f6d37306,chore,Load Dishwasher,2
+8d3ca93b,2026-09-01T20:13:49.895Z,f6d37306,adjustment,Removing Test Chore,-2
