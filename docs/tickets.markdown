@@ -18,8 +18,6 @@ permalink: /tickets/
     </thead>
     <tbody id="ticketHistoryBody"></tbody>
   </table>
-
-  <p><a href="{{ '/tickets/admin/' | relative_url }}">Parent admin</a></p>
 </div>
 
 <script src="{{ '/assets/js/tickets-common.js' | relative_url }}"></script>

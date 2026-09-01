@@ -35,7 +35,7 @@ permalink: /tickets/admin/
       <h2>Behavior adjustment</h2>
       <form id="adjustmentForm" class="ticket-stack">
         <label>Kid <select id="adjustmentChild" required></select></label>
-        <label>Points (negative to remove) <input id="adjustmentPoints" type="number" required></label>
+        <label>Remove Tickets <input id="adjustmentPoints" type="number" required></label>
         <label>Reason <input id="adjustmentReason" type="text" placeholder="e.g. Talked back"></label>
         <button type="submit">Apply</button>
       </form>
@@ -65,7 +65,7 @@ permalink: /tickets/admin/
       <h2>Add chore</h2>
       <form id="addChoreForm" class="ticket-stack">
         <label>Name <input id="addChoreName" type="text" required></label>
-        <label>Points <input id="addChorePoints" type="number" required></label>
+        <label>Tickets id="addChorePoints" type="number" required></label>
         <button type="submit">Add</button>
       </form>
     </section>
