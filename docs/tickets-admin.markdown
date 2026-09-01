@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Tickets Admin
+title: Bozio Bucks Admin
 permalink: /tickets/admin/
 ---
 
@@ -10,8 +10,10 @@ permalink: /tickets/admin/
 
 <div class="ticket-app">
   <div class="ticket-auth">
-    <button id="githubSignIn" type="button">Sign in with GitHub</button>
-    <button id="githubSignOut" type="button" hidden>Sign out</button>
+    <label for="githubToken">GitHub token</label>
+    <input id="githubToken" type="password" autocomplete="off" placeholder="github_pat_...">
+    <button id="githubConnect" type="button">Connect</button>
+    <button id="githubSignOut" type="button" hidden>Disconnect</button>
     <span id="githubIdentity"></span>
   </div>
 
@@ -99,7 +101,6 @@ permalink: /tickets/admin/
 
 <script src="{{ '/assets/js/tickets-common.js' | relative_url }}"></script>
 <script>
-  const GITHUB_OAUTH_CLIENT_ID = "Ov23liJwfR7yDdPpJV4F";
   const GITHUB_REPOSITORY = "ryanbozio/ryanbozio.github.io";
   const GITHUB_BRANCH = "main";
 </script>

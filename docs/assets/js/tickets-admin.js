@@ -1,4 +1,4 @@
-// Parent admin panel: reads CSV data and commits changes directly through GitHub OAuth.
+// Parent admin panel: reads CSV data and commits changes through the GitHub API.
 
 const GITHUB_TOKEN_STORAGE_KEY = "ticketTrackerGithubToken";
 let githubToken = sessionStorage.getItem(GITHUB_TOKEN_STORAGE_KEY);
@@ -10,7 +10,8 @@ function showStatus(message, isError) {
 }
 
 function updateAuthControls(login = "") {
-  document.getElementById("githubSignIn").hidden = Boolean(githubToken);
+  document.getElementById("githubToken").hidden = Boolean(githubToken);
+  document.getElementById("githubConnect").hidden = Boolean(githubToken);
   document.getElementById("githubSignOut").hidden = !githubToken;
   document.getElementById("githubIdentity").textContent = login ? `Signed in as ${login}` : githubToken ? "Signed in" : "";
 }
@@ -84,39 +85,14 @@ async function saveAction(action, payload) {
   showStatus("Saved! GitHub Pages may take ~a minute to rebuild before the dashboard reflects this.", false);
 }
 
-async function signInWithGitHub() {
-  if (!GITHUB_OAUTH_CLIENT_ID || GITHUB_OAUTH_CLIENT_ID.startsWith("PASTE_")) {
-    throw new Error("Set GITHUB_OAUTH_CLIENT_ID before signing in.");
-  }
-  const deviceResponse = await fetch("https://github.com/login/device/code", {
-    method: "POST",
-    headers: { Accept: "application/json", "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ client_id: GITHUB_OAUTH_CLIENT_ID, scope: "repo" }),
-  });
-  const device = await deviceResponse.json();
-  if (!deviceResponse.ok) throw new Error(device.error_description || "Could not start GitHub sign-in.");
-  showStatus(`Enter code ${device.user_code} at ${device.verification_uri}.`, false);
-  window.open(device.verification_uri, "_blank", "noopener");
-  const expiresAt = Date.now() + device.expires_in * 1000;
-  const pollForToken = async () => {
-    const response = await fetch("https://github.com/login/oauth/access_token", {
-      method: "POST",
-      headers: { Accept: "application/json", "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ client_id: GITHUB_OAUTH_CLIENT_ID, device_code: device.device_code, grant_type: "urn:ietf:params:oauth:grant-type:device_code" }),
-    });
-    const data = await response.json();
-    if (data.access_token) return data.access_token;
-    if (data.error === "authorization_pending" && Date.now() < expiresAt) {
-      await new Promise((resolve) => setTimeout(resolve, device.interval * 1000));
-      return pollForToken();
-    }
-    throw new Error(data.error_description || "GitHub sign-in expired or was declined.");
-  };
-  githubToken = await pollForToken();
-  sessionStorage.setItem(GITHUB_TOKEN_STORAGE_KEY, githubToken);
+async function connectGitHub() {
+  githubToken = document.getElementById("githubToken").value.trim();
+  if (!githubToken) throw new Error("Paste a GitHub token first.");
   const user = await githubApi("/user");
+  sessionStorage.setItem(GITHUB_TOKEN_STORAGE_KEY, githubToken);
+  document.getElementById("githubToken").value = "";
   updateAuthControls(user.login);
-  showStatus("Signed in with GitHub.", false);
+  showStatus("Connected to GitHub.", false);
 }
 
 let state = { children: [], chores: [], prizes: [], ledger: [] };
@@ -240,15 +216,20 @@ document.getElementById("addPrizeForm").addEventListener("submit", async (e) => 
   await loadData();
 });
 
-document.getElementById("githubSignIn").addEventListener("click", () => {
-  signInWithGitHub().catch((error) => showStatus(error.message, true));
+document.getElementById("githubConnect").addEventListener("click", () => {
+  connectGitHub().catch((error) => {
+    githubToken = null;
+    updateAuthControls();
+    showStatus(error.message, true);
+  });
 });
 
 document.getElementById("githubSignOut").addEventListener("click", () => {
   sessionStorage.removeItem(GITHUB_TOKEN_STORAGE_KEY);
   githubToken = null;
+  document.getElementById("githubToken").value = "";
   updateAuthControls();
-  showStatus("Signed out.", false);
+  showStatus("Disconnected from GitHub.", false);
 });
 
 loadData().catch((err) => {
