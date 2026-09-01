@@ -32,11 +32,10 @@ theme: minima
 plugins:
   - jekyll-feed
 
-# Explicit nav so the parent-only admin page doesn't show up in the header (still reachable via a direct link).
+# Explicit navigation for the site header.
 header_pages:
-  - about.markdown
-  - tasks.markdown
   - tickets.markdown
+  - tickets-admin.markdown
 
 # Exclude from processing.
 # The following items will not be processed, by default.
