@@ -65,7 +65,7 @@ permalink: /tickets/admin/
       <h2>Add chore</h2>
       <form id="addChoreForm" class="ticket-stack">
         <label>Name <input id="addChoreName" type="text" required></label>
-        <label>Tickets id="addChorePoints" type="number" required></label>
+        <label>Tickets <id="addChorePoints" type="number" required></label>
         <button type="submit">Add</button>
       </form>
     </section>
