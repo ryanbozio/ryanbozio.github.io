@@ -27,7 +27,11 @@ async function githubApi(path, options = {}) {
     },
   });
   const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(data.message || `GitHub request failed (${response.status})`);
+  if (!response.ok) {
+    const error = new Error(data.message || `GitHub request failed (${response.status})`);
+    error.status = response.status;
+    throw error;
+  }
   return data;
 }
 
@@ -50,14 +54,21 @@ function newId() {
 
 async function appendCsvRow(path, fields, message) {
   if (!githubToken) throw new Error("Sign in with GitHub before making changes.");
-  const file = await githubApi(`/repos/${GITHUB_REPOSITORY}/contents/${path}?ref=${encodeURIComponent(GITHUB_BRANCH)}`);
-  const current = base64ToText(file.content);
-  const updated = `${current.replace(/\n?$/, "")}\n${fields.map(csvField).join(",")}\n`;
-  await githubApi(`/repos/${GITHUB_REPOSITORY}/contents/${path}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message, content: textToBase64(updated), sha: file.sha, branch: GITHUB_BRANCH }),
-  });
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const file = await githubApi(`/repos/${GITHUB_REPOSITORY}/contents/${path}?ref=${encodeURIComponent(GITHUB_BRANCH)}`);
+    const current = base64ToText(file.content);
+    const updated = `${current.replace(/\n?$/, "")}\n${fields.map(csvField).join(",")}\n`;
+    try {
+      await githubApi(`/repos/${GITHUB_REPOSITORY}/contents/${path}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, content: textToBase64(updated), sha: file.sha, branch: GITHUB_BRANCH }),
+      });
+      return;
+    } catch (error) {
+      if (error.status !== 409 || attempt === 2) throw error;
+    }
+  }
 }
 
 async function saveAction(action, payload) {
@@ -83,6 +94,17 @@ async function saveAction(action, payload) {
       throw new Error(`Unknown action: ${action}`);
   }
   showStatus("Saved! GitHub Pages may take ~a minute to rebuild before the dashboard reflects this.", false);
+}
+
+async function submitAction(action, payload, afterSave) {
+  try {
+    await saveAction(action, payload);
+    if (afterSave) afterSave();
+    await loadData();
+  } catch (error) {
+    console.error(error);
+    showStatus(error.message, true);
+  }
 }
 
 async function connectGitHub() {
@@ -155,8 +177,7 @@ document.getElementById("logChoreForm").addEventListener("submit", async (e) => 
   const choreId = document.getElementById("logChoreChore").value;
   const chore = state.chores.find((c) => c.id === choreId);
   if (!chore) return;
-  await saveAction("log_chore", { childId, description: chore.name, points: parseInt(chore.points, 10) });
-  await loadData();
+  await submitAction("log_chore", { childId, description: chore.name, points: parseInt(chore.points, 10) });
 });
 
 document.getElementById("adjustmentForm").addEventListener("submit", async (e) => {
@@ -165,9 +186,7 @@ document.getElementById("adjustmentForm").addEventListener("submit", async (e) =
   const points = parseInt(document.getElementById("adjustmentPoints").value, 10);
   const reason = document.getElementById("adjustmentReason").value.trim() || "Behavior adjustment";
   if (!points) return;
-  await saveAction("adjustment", { childId, points, reason });
-  document.getElementById("adjustmentForm").reset();
-  await loadData();
+  await submitAction("adjustment", { childId, points, reason }, () => document.getElementById("adjustmentForm").reset());
 });
 
 document.getElementById("redeemForm").addEventListener("submit", async (e) => {
@@ -181,8 +200,7 @@ document.getElementById("redeemForm").addEventListener("submit", async (e) => {
     showStatus("Not enough tickets for that prize.", true);
     return;
   }
-  await saveAction("redeem", { childId, description: prize.name, cost: parseInt(prize.cost, 10) });
-  await loadData();
+  await submitAction("redeem", { childId, description: prize.name, cost: parseInt(prize.cost, 10) });
 });
 
 document.getElementById("addChildForm").addEventListener("submit", async (e) => {
@@ -190,9 +208,7 @@ document.getElementById("addChildForm").addEventListener("submit", async (e) => 
   const name = document.getElementById("addChildName").value.trim();
   const color = document.getElementById("addChildColor").value;
   if (!name) return;
-  await saveAction("add_child", { name, color });
-  document.getElementById("addChildForm").reset();
-  await loadData();
+  await submitAction("add_child", { name, color }, () => document.getElementById("addChildForm").reset());
 });
 
 document.getElementById("addChoreForm").addEventListener("submit", async (e) => {
@@ -200,9 +216,7 @@ document.getElementById("addChoreForm").addEventListener("submit", async (e) => 
   const name = document.getElementById("addChoreName").value.trim();
   const points = parseInt(document.getElementById("addChorePoints").value, 10);
   if (!name || Number.isNaN(points)) return;
-  await saveAction("add_chore", { name, points });
-  document.getElementById("addChoreForm").reset();
-  await loadData();
+  await submitAction("add_chore", { name, points }, () => document.getElementById("addChoreForm").reset());
 });
 
 document.getElementById("addPrizeForm").addEventListener("submit", async (e) => {
@@ -211,9 +225,7 @@ document.getElementById("addPrizeForm").addEventListener("submit", async (e) => 
   const cost = parseInt(document.getElementById("addPrizeCost").value, 10);
   const category = document.getElementById("addPrizeCategory").value;
   if (!name || Number.isNaN(cost)) return;
-  await saveAction("add_prize", { name, cost, category });
-  document.getElementById("addPrizeForm").reset();
-  await loadData();
+  await submitAction("add_prize", { name, cost, category }, () => document.getElementById("addPrizeForm").reset());
 });
 
 document.getElementById("githubConnect").addEventListener("click", () => {
