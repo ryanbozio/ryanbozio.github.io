@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Bozio Bucks Admin
+title: Chore Store Admin
 permalink: /tickets/admin/
 ---
 
