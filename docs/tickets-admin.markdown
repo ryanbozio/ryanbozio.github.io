@@ -32,10 +32,10 @@ permalink: /tickets/admin/
     </section>
 
     <section>
-      <h2>Behavior adjustment</h2>
+      <h2>Behavior Adjustment +/-</h2>
       <form id="adjustmentForm" class="ticket-stack">
         <label>Kid <select id="adjustmentChild" required></select></label>
-        <label>Remove Tickets <input id="adjustmentPoints" type="number" required></label>
+        <label>Tickets <input id="adjustmentPoints" type="number" required></label>
         <label>Reason <input id="adjustmentReason" type="text" placeholder="e.g. Talked back"></label>
         <button type="submit">Apply</button>
       </form>
