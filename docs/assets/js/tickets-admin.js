@@ -233,9 +233,11 @@ document.getElementById("addChildForm").addEventListener("submit", async (e) => 
   e.preventDefault();
   const name = document.getElementById("addChildName").value.trim();
   const color = document.getElementById("addChildColor").value;
-  const githubUsername = document.getElementById("addChildGithubUsername").value.trim().toLowerCase();
-  if (!name || !githubUsername) return;
-  await submitAction("add_child", { name, color, githubUsername }, () => document.getElementById("addChildForm").reset());
+  if (!name || !githubLogin) {
+    showStatus("Connect a GitHub token before adding a kid.", true);
+    return;
+  }
+  await submitAction("add_child", { name, color, githubUsername: githubLogin }, () => document.getElementById("addChildForm").reset());
 });
 
 document.getElementById("addChoreForm").addEventListener("submit", async (e) => {
