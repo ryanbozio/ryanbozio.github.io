@@ -2,6 +2,7 @@
 
 const GITHUB_TOKEN_STORAGE_KEY = "ticketTrackerGithubToken";
 let githubToken = sessionStorage.getItem(GITHUB_TOKEN_STORAGE_KEY);
+let githubLogin = "";
 
 function showStatus(message, isError) {
   const el = document.getElementById("ticketStatus");
@@ -81,7 +82,7 @@ async function appendCsvRow(path, fields, message) {
 async function saveAction(action, payload) {
   switch (action) {
     case "add_child":
-      await appendCsvRow("docs/data/children.csv", [newId(), payload.name, payload.color || "#4a90d9"], `Add child ${payload.name}`);
+      await appendCsvRow("docs/data/children.csv", [newId(), payload.name, payload.color || "#4a90d9", payload.githubUsername], `Add child ${payload.name}`);
       break;
     case "add_chore":
       await appendCsvRow("docs/data/chores.csv", [newId(), payload.name, payload.points], `Add chore ${payload.name}`);
@@ -120,9 +121,11 @@ async function connectGitHub() {
   githubToken = document.getElementById("githubToken").value.trim();
   if (!githubToken) throw new Error("Paste a GitHub token first.");
   const user = await githubApi("/user");
+  githubLogin = user.login.toLowerCase();
   sessionStorage.setItem(GITHUB_TOKEN_STORAGE_KEY, githubToken);
   document.getElementById("githubToken").value = "";
   updateAuthControls(user.login);
+  renderAll();
   showStatus("Connected to GitHub.", false);
 }
 
@@ -145,11 +148,12 @@ function fillSelect(selectEl, items, labelFn) {
 
 function renderAll() {
   const { children, chores, prizes, ledger } = state;
+  const managedChildren = githubLogin ? children.filter((child) => child.github_username.toLowerCase() === githubLogin) : [];
   const balances = computeBalances(ledger);
   const childrenById = Object.fromEntries(children.map((c) => [c.id, c]));
 
   const cardsEl = document.getElementById("ticketCards");
-  cardsEl.innerHTML = children
+  cardsEl.innerHTML = managedChildren
     .map(
       (c) => {
         const prizes = pendingRedemptions(ledger, c.id);
@@ -159,7 +163,7 @@ function renderAll() {
         return `<div class="ticket-card" style="border-top-color:${c.color || "#4a90d9"}"><h3>${escapeHtml(c.name)}</h3><p class="ticket-balance">${balances[c.id] || 0} 🎟️</p>${prizeList}</div>`;
       }
     )
-    .join("") || "<p>No kids added yet.</p>";
+    .join("") || `<p>${githubLogin ? "No kids are assigned to this GitHub account." : "Connect a GitHub token to manage kids."}</p>`;
 
   cardsEl.querySelectorAll(".ticket-use-prize").forEach((button) => {
     button.addEventListener("click", () => {
@@ -168,13 +172,14 @@ function renderAll() {
     });
   });
 
-  fillSelect(document.getElementById("logChoreChild"), children, (c) => c.name);
-  fillSelect(document.getElementById("adjustmentChild"), children, (c) => c.name);
-  fillSelect(document.getElementById("redeemChild"), children, (c) => c.name);
+  fillSelect(document.getElementById("logChoreChild"), managedChildren, (c) => c.name);
+  fillSelect(document.getElementById("adjustmentChild"), managedChildren, (c) => c.name);
+  fillSelect(document.getElementById("redeemChild"), managedChildren, (c) => c.name);
   fillSelect(document.getElementById("logChoreChore"), chores, (c) => `${c.name} (+${c.points})`);
   fillSelect(document.getElementById("redeemPrize"), prizes, (p) => `${p.name} (-${p.cost})`);
 
-  const rows = [...ledger].reverse().slice(0, 50);
+  const managedChildIds = new Set(managedChildren.map((child) => child.id));
+  const rows = ledger.filter((entry) => managedChildIds.has(entry.child_id)).reverse().slice(0, 50);
   const bodyEl = document.getElementById("ticketHistoryBody");
   bodyEl.innerHTML =
     rows
@@ -228,8 +233,9 @@ document.getElementById("addChildForm").addEventListener("submit", async (e) => 
   e.preventDefault();
   const name = document.getElementById("addChildName").value.trim();
   const color = document.getElementById("addChildColor").value;
-  if (!name) return;
-  await submitAction("add_child", { name, color }, () => document.getElementById("addChildForm").reset());
+  const githubUsername = document.getElementById("addChildGithubUsername").value.trim().toLowerCase();
+  if (!name || !githubUsername) return;
+  await submitAction("add_child", { name, color, githubUsername }, () => document.getElementById("addChildForm").reset());
 });
 
 document.getElementById("addChoreForm").addEventListener("submit", async (e) => {
@@ -260,8 +266,10 @@ document.getElementById("githubConnect").addEventListener("click", () => {
 document.getElementById("githubSignOut").addEventListener("click", () => {
   sessionStorage.removeItem(GITHUB_TOKEN_STORAGE_KEY);
   githubToken = null;
+  githubLogin = "";
   document.getElementById("githubToken").value = "";
   updateAuthControls();
+  renderAll();
   showStatus("Disconnected from GitHub.", false);
 });
 
@@ -272,11 +280,17 @@ loadData().catch((err) => {
 
 if (githubToken) {
   githubApi("/user")
-    .then((user) => updateAuthControls(user.login))
+    .then((user) => {
+      githubLogin = user.login.toLowerCase();
+      updateAuthControls(user.login);
+      renderAll();
+    })
     .catch(() => {
       sessionStorage.removeItem(GITHUB_TOKEN_STORAGE_KEY);
       githubToken = null;
+      githubLogin = "";
       updateAuthControls();
+      renderAll();
     });
 } else {
   updateAuthControls();

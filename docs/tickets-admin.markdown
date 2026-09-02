@@ -57,6 +57,7 @@ permalink: /tickets/admin/
       <form id="addChildForm" class="ticket-stack">
         <label>Name <input id="addChildName" type="text" required></label>
         <label>Color <input id="addChildColor" type="color" value="#4a90d9"></label>
+        <label>GitHub username <input id="addChildGithubUsername" type="text" required></label>
         <button type="submit">Add</button>
       </form>
     </section>
