@@ -79,7 +79,12 @@ document.getElementById("childChores").addEventListener("click", (event) => {
   if (!button) return;
   const chore = childState.chores.find((item) => item.id === button.dataset.choreId);
   button.disabled = true;
-  logChore(chore).finally(() => { button.disabled = false; });
+  button.textContent = "Logging...";
+  showChildStatus(`Logging ${chore.name}...`, false);
+  logChore(chore).finally(() => {
+    button.disabled = false;
+    button.textContent = "Log chore";
+  });
 });
 
 document.getElementById("childPrizes").addEventListener("click", async (event) => {
