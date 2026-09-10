@@ -107,8 +107,3 @@ function pendingRedemptions(ledger, childId) {
   );
 }
 
-function imageForName(name, category) {
-  const keywords = `${name} ${category || "family"}`.trim().replace(/[^a-z0-9 ]/gi, "").replace(/\s+/g, ",");
-  const lock = Array.from(`${name}:${category || ""}`).reduce((sum, character) => sum + character.charCodeAt(0), 0);
-  return `https://loremflickr.com/600/400/${encodeURIComponent(keywords)}?lock=${lock}`;
-}
