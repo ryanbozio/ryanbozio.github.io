@@ -3,3 +3,4 @@ id,timestamp,child_id,type,description,points
 6e1ccb2d,2026-09-10T03:04:44.891Z,f6d37306,chore,Make Bed,1
 98c4953a,2026-09-10T03:05:50.080Z,f6d37306,chore,Put Away Clean Laundry,1
 c9decee2,2026-09-10T03:07:08.464Z,f6d37306,chore,Clean Bathroom,3
+92303d0a,2026-09-10T03:09:57.475Z,f6d37306,redemption,+15 min special time,-5
