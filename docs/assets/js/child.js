@@ -50,7 +50,7 @@ async function loadChild() {
     : "<li>No unused prizes.</li>";
   document.getElementById("childChores").innerHTML = chores.map((chore) => `<article class="app-store-item"><img src="${choreImage(chore)}" alt="${escapeHtml(chore.name)}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80';"><div><h3>${escapeHtml(chore.name)}</h3><p>${chore.points} points</p><button type="button" data-chore-id="${chore.id}">Log chore</button></div></article>`).join("");
   const history = ledger.filter((entry) => entry.child_id === current.id).reverse();
-  document.getElementById("childHistory").innerHTML = history.length ? history.map((entry) => `<tr><td>${escapeHtml(entry.timestamp)}</td><td>${escapeHtml(entry.type)}</td><td>${escapeHtml(entry.description)}</td><td class="${entry.points >= 0 ? "app-positive" : "app-negative"}">${entry.points > 0 ? "+" : ""}${entry.points}</td></tr>`).join("") : '<tr><td colspan="4">No activity yet.</td></tr>';
+  document.getElementById("childHistory").innerHTML = history.length ? history.map((entry) => `<tr><td>${escapeHtml(formatActivityDate(entry.timestamp))}</td><td>${escapeHtml(entry.type)}</td><td>${escapeHtml(entry.description)}</td><td class="${entry.points >= 0 ? "app-positive" : "app-negative"}">${entry.points > 0 ? "+" : ""}${entry.points}</td></tr>`).join("") : '<tr><td colspan="4">No activity yet.</td></tr>';
 }
 
 function choreImage(chore) {
