@@ -191,8 +191,6 @@ function renderAll() {
     });
   });
 
-  fillSelect(document.getElementById("redeemPrize"), prizes, (p) => `${p.name} (-${p.cost})`);
-
   const managedChildIds = new Set(managedChildren.map((child) => child.id));
   const rows = ledger.filter((entry) => managedChildIds.has(entry.child_id)).reverse().slice(0, 50);
   const bodyEl = document.getElementById("appHistoryBody");
@@ -230,20 +228,6 @@ function renderAll() {
     }
   }));
 }
-
-document.getElementById("redeemForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const childId = document.getElementById("redeemChild").value;
-  const prizeId = document.getElementById("redeemPrize").value;
-  const prize = state.prizes.find((p) => p.id === prizeId);
-  if (!prize) return;
-  const balances = computeBalances(state.ledger);
-  if ((balances[childId] || 0) < parseInt(prize.cost, 10)) {
-    showStatus("Not enough points for that prize.", true);
-    return;
-  }
-  await submitAction("redeem", { childId, description: prize.name, cost: parseInt(prize.cost, 10) });
-});
 
 document.getElementById("addChildForm").addEventListener("submit", async (e) => {
   e.preventDefault();

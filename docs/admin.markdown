@@ -22,14 +22,6 @@ permalink: /Admin/
   <div id="appCards" class="app-cards"></div>
 
   <div class="app-grid">
-    <section>
-      <h2>Redeem a prize</h2>
-      <form id="redeemForm" class="app-stack">
-        <label>Kid <select id="redeemChild" required></select></label>
-        <label>Prize <select id="redeemPrize" required></select></label>
-        <button type="submit">Redeem</button>
-      </form>
-    </section>
   </div>
 
   <div class="app-grid">
