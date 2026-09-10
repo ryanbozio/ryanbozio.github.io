@@ -1,15 +1,15 @@
 // Parent admin panel: reads CSV data and commits changes through the GitHub API.
 
-if (!requireTicketLogin()) throw new Error("Login required");
+if (!requireActionLogin()) throw new Error("Login required");
 
-const GITHUB_TOKEN_STORAGE_KEY = "ticketTrackerGithubToken";
+const GITHUB_TOKEN_STORAGE_KEY = "familyAppGithubToken";
 let githubToken = sessionStorage.getItem(GITHUB_TOKEN_STORAGE_KEY);
 let githubLogin = "";
 
 function showStatus(message, isError) {
-  const el = document.getElementById("ticketStatus");
+  const el = document.getElementById("appStatus");
   el.textContent = message;
-  el.className = `ticket-status ticket-status-visible ${isError ? "ticket-status-error" : "ticket-status-success"}`;
+  el.className = `app-status app-status-visible ${isError ? "app-status-error" : "app-status-success"}`;
 }
 
 function updateAuthControls(login = "") {
@@ -99,7 +99,7 @@ async function saveAction(action, payload) {
       const points = action === "redeem" ? -Math.abs(payload.cost) : payload.points;
       const description = action === "adjustment" ? payload.reason : action === "use_redemption" ? payload.redemptionId : payload.description;
       const type = action === "log_chore" ? "chore" : action === "redeem" ? "redemption" : action === "use_redemption" ? "redemption_used" : "adjustment";
-      await appendCsvRow("docs/data/ledger.csv", [newId(), new Date().toISOString(), payload.childId, type, description, points || 0], `Ticket ${action}: ${description}`);
+      await appendCsvRow("docs/data/ledger.csv", [newId(), new Date().toISOString(), payload.childId, type, description, points || 0], `Action ${action}: ${description}`);
       break;
     }
     default:
@@ -125,7 +125,7 @@ async function connectGitHub() {
   const user = await githubApi("/user");
   githubLogin = user.login.toLowerCase();
   sessionStorage.setItem(GITHUB_TOKEN_STORAGE_KEY, githubToken);
-  sessionStorage.setItem("ticketTrackerGithubLogin", githubLogin);
+  sessionStorage.setItem("familyAppGithubLogin", githubLogin);
   document.getElementById("githubToken").value = "";
   updateAuthControls(user.login);
   renderAll();
@@ -171,20 +171,20 @@ function renderAll() {
   const balances = computeBalances(ledger);
   const childrenById = Object.fromEntries(children.map((c) => [c.id, c]));
 
-  const cardsEl = document.getElementById("ticketCards");
+  const cardsEl = document.getElementById("appCards");
   cardsEl.innerHTML = managedChildren
     .map(
       (c) => {
         const prizes = pendingRedemptions(ledger, c.id);
         const prizeList = prizes.length
-          ? `<ul class="ticket-prizes">${prizes.map((prize) => `<li><span>${escapeHtml(prize.description)}</span><button type="button" class="ticket-use-prize" data-child-id="${escapeHtml(c.id)}" data-redemption-id="${escapeHtml(prize.id)}">Use</button></li>`).join("")}</ul>`
+          ? `<ul class="app-prizes">${prizes.map((prize) => `<li><span>${escapeHtml(prize.description)}</span><button type="button" class="app-use-prize" data-child-id="${escapeHtml(c.id)}" data-redemption-id="${escapeHtml(prize.id)}">Use</button></li>`).join("")}</ul>`
           : "";
-        return `<div class="ticket-card" style="border-top-color:${c.color || "#4a90d9"}"><h3>${escapeHtml(c.name)}</h3><p class="ticket-balance">${balances[c.id] || 0} 🎟️</p>${prizeList}</div>`;
+        return `<div class="app-card" style="border-top-color:${c.color || "#4a90d9"}"><h3>${escapeHtml(c.name)}</h3><p class="app-balance">${balances[c.id] || 0} 🎟️</p>${prizeList}</div>`;
       }
     )
     .join("") || `<p>${githubLogin ? "No kids are assigned to this GitHub account." : "Connect a GitHub token to manage kids."}</p>`;
 
-  cardsEl.querySelectorAll(".ticket-use-prize").forEach((button) => {
+  cardsEl.querySelectorAll(".app-use-prize").forEach((button) => {
     button.addEventListener("click", () => {
       button.disabled = true;
       submitAction("use_redemption", { childId: button.dataset.childId, redemptionId: button.dataset.redemptionId });
@@ -199,7 +199,7 @@ function renderAll() {
 
   const managedChildIds = new Set(managedChildren.map((child) => child.id));
   const rows = ledger.filter((entry) => managedChildIds.has(entry.child_id)).reverse().slice(0, 50);
-  const bodyEl = document.getElementById("ticketHistoryBody");
+  const bodyEl = document.getElementById("appHistoryBody");
   bodyEl.innerHTML =
     rows
       .map((entry) => {
@@ -210,7 +210,7 @@ function renderAll() {
           <td>${escapeHtml(childName)}</td>
           <td>${escapeHtml(entry.type)}</td>
           <td>${escapeHtml(entry.description)}</td>
-          <td class="${points >= 0 ? "ticket-positive" : "ticket-negative"}">${points > 0 ? "+" : ""}${points}</td>
+          <td class="${points >= 0 ? "app-positive" : "app-negative"}">${points > 0 ? "+" : ""}${points}</td>
         </tr>`;
       })
       .join("") || '<tr><td colspan="5">No activity yet.</td></tr>';
@@ -220,7 +220,7 @@ function renderAll() {
     ["Kids", managedChildren, "docs/data/children.csv"],
     ["Chores", chores, "docs/data/chores.csv"],
     ["Prizes", prizes, "docs/data/prizes.csv"],
-  ].map(([heading, items, path]) => `<div><h3>${heading}</h3>${items.map((item) => `<div class="ticket-manage-row"><span>${escapeHtml(item.name)}</span><button type="button" data-remove-path="${path}" data-remove-id="${item.id}" data-remove-label="${escapeHtml(item.name)}">Remove</button></div>`).join("") || "<p class=\"ticket-muted\">None</p>"}</div>`).join("");
+  ].map(([heading, items, path]) => `<div><h3>${heading}</h3>${items.map((item) => `<div class="app-manage-row"><span>${escapeHtml(item.name)}</span><button type="button" data-remove-path="${path}" data-remove-id="${item.id}" data-remove-label="${escapeHtml(item.name)}">Remove</button></div>`).join("") || "<p class=\"app-muted\">None</p>"}</div>`).join("");
   manageEl.querySelectorAll("button").forEach((button) => button.addEventListener("click", async () => {
     if (!window.confirm(`Remove ${button.dataset.removeLabel}?`)) return;
     button.disabled = true;
@@ -261,7 +261,7 @@ document.getElementById("redeemForm").addEventListener("submit", async (e) => {
   if (!prize) return;
   const balances = computeBalances(state.ledger);
   if ((balances[childId] || 0) < parseInt(prize.cost, 10)) {
-    showStatus("Not enough tickets for that prize.", true);
+    showStatus("Not enough points for that prize.", true);
     return;
   }
   await submitAction("redeem", { childId, description: prize.name, cost: parseInt(prize.cost, 10) });
@@ -315,7 +315,7 @@ document.getElementById("githubSignOut").addEventListener("click", () => {
 
 loadData().catch((err) => {
   console.error(err);
-  showStatus(`Couldn't load ticket data: ${err.message}`, true);
+  showStatus(`Couldn't load app data: ${err.message}`, true);
 });
 
 if (githubToken) {

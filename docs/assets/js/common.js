@@ -1,16 +1,16 @@
-// Shared helpers for the ticket tracker pages: session, CSV parsing, and balance math.
+// Shared helpers for the app tracker pages: session, CSV parsing, and balance math.
 
-const TICKET_TOKEN_KEY = "ticketTrackerGithubToken";
+const APP_TOKEN_KEY = "familyAppGithubToken";
 
-function ticketSession() {
+function appSession() {
   return {
-    token: sessionStorage.getItem(TICKET_TOKEN_KEY),
-    login: sessionStorage.getItem("ticketTrackerGithubLogin"),
+    token: sessionStorage.getItem(APP_TOKEN_KEY),
+    login: sessionStorage.getItem("familyAppGithubLogin"),
   };
 }
 
-function requireTicketLogin() {
-  const session = ticketSession();
+function requireActionLogin() {
+  const session = appSession();
   if (!session.token || !session.login) {
     window.location.replace("/Login/");
     return false;
@@ -18,9 +18,9 @@ function requireTicketLogin() {
   return true;
 }
 
-function ticketLogout() {
-  sessionStorage.removeItem(TICKET_TOKEN_KEY);
-  sessionStorage.removeItem("ticketTrackerGithubLogin");
+function appLogout() {
+  sessionStorage.removeItem(APP_TOKEN_KEY);
+  sessionStorage.removeItem("familyAppGithubLogin");
   window.location.replace("/Login/");
 }
 

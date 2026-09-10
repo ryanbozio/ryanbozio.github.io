@@ -1,0 +1,57 @@
+.app-app { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+.app-cards { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1rem 0; }
+.app-card {
+  background: #fff;
+  border-top: 6px solid #4a90d9;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  min-width: 160px;
+}
+.app-card h3 { margin: 0 0 0.25rem; font-size: 1.1rem; }
+.app-balance { font-size: 1.75rem; font-weight: bold; margin: 0; }
+.app-prizes { list-style: none; margin: 0.8rem 0 0; padding: 0; }
+.app-prizes li { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #eee; }
+.app-prizes button { padding: 0.25rem 0.5rem; }
+.app-history { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; }
+.app-history th, .app-history td { padding: 0.5rem 0.75rem; border-bottom: 1px solid #eee; text-align: left; font-size: 0.9rem; }
+.app-positive { color: #1a7f37; font-weight: bold; }
+.app-negative { color: #c0392b; font-weight: bold; }
+.app-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin: 1rem 0; }
+.app-grid section { background: #fff; border-radius: 8px; padding: 1rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+.app-stack { display: flex; flex-direction: column; gap: 0.6rem; }
+.app-stack label { display: flex; flex-direction: column; font-size: 0.85rem; gap: 0.25rem; }
+.app-app input, .app-app select, .app-app button {
+  font: inherit; padding: 0.4rem; border-radius: 4px; border: 1px solid #ccc;
+}
+.app-app button { cursor: pointer; background: #4a90d9; color: #fff; border: none; }
+.app-app button:hover { background: #3a78bd; }
+.app-status { padding: 0.6rem 1rem; border-radius: 6px; margin: 0.75rem 0; display: none; }
+.app-status.app-status-visible { display: block; }
+.app-status.app-status-error { background: #fdecea; border: 1px solid #f5c6cb; color: #c0392b; }
+.app-status.app-status-success { background: #eafaf1; border: 1px solid #c3e6cb; color: #1a7f37; }
+.app-auth { display: flex; align-items: center; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 0.75rem; }
+.app-auth button[hidden] { display: none; }
+.app-app a.app-card { color: inherit; text-decoration: none; transition: transform 160ms ease, box-shadow 160ms ease; }
+.app-app a.app-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(16, 24, 40, 0.14); }
+.app-panel { background: #fff; border-radius: 12px; padding: 1.25rem; box-shadow: 0 2px 10px rgba(16, 24, 40, 0.08); margin: 1rem 0; }
+.app-hero { max-width: 620px; margin: 2rem 0; }
+.app-kicker { color: #e16b3a; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; margin: 0 0 0.5rem; }
+.app-page-heading { margin: 1.5rem 0; }
+.app-page-heading h1, .app-hero h1 { margin: 0; }
+.app-back-link { display: inline-block; margin-bottom: 1rem; }
+.app-child-balance { color: #176b5b; font-size: 2rem; font-weight: 700; margin: 1rem 0 1.5rem; }
+.app-muted { color: #667085; }
+.app-section-heading { align-items: baseline; display: flex; justify-content: space-between; gap: 1rem; }
+.app-section-heading span { color: #667085; font-size: 0.85rem; }
+.app-inline-form { display: flex; gap: 0.75rem; }
+.app-inline-form select { flex: 1; }
+.app-store-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+.app-store-item { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(16, 24, 40, 0.08); }
+.app-store-item img { display: block; height: 150px; object-fit: cover; width: 100%; }
+.app-store-item > div { padding: 1rem; }
+.app-store-item h2 { margin: 0.25rem 0; }
+.app-manage-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+.app-manage-row { align-items: center; border-bottom: 1px solid #eaecf0; display: flex; justify-content: space-between; gap: 0.75rem; padding: 0.55rem 0; }
+.app-manage-row button { background: #b42318; padding: 0.25rem 0.55rem; }
+@media (max-width: 560px) { .app-inline-form { flex-direction: column; } .app-section-heading { align-items: flex-start; flex-direction: column; gap: 0.25rem; } }

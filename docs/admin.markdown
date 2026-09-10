@@ -4,12 +4,12 @@ title: Admin
 permalink: /Admin/
 ---
 
-<link rel="stylesheet" href="{{ '/assets/css/tickets.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/css/app.css' | relative_url }}">
 
 # Parent Admin
 
-<div class="ticket-app">
-  <div class="ticket-auth">
+<div class="app-app">
+  <div class="app-auth">
     <label for="githubToken">GitHub token</label>
     <input id="githubToken" type="password" autocomplete="off" placeholder="github_pat_...">
     <button id="githubConnect" type="button">Connect</button>
@@ -17,14 +17,14 @@ permalink: /Admin/
     <span id="githubIdentity"></span>
   </div>
 
-  <div id="ticketStatus" class="ticket-status"></div>
+  <div id="appStatus" class="app-status"></div>
 
-  <div id="ticketCards" class="ticket-cards"></div>
+  <div id="appCards" class="app-cards"></div>
 
-  <div class="ticket-grid">
+  <div class="app-grid">
     <section>
       <h2>Log a chore</h2>
-      <form id="logChoreForm" class="ticket-stack">
+      <form id="logChoreForm" class="app-stack">
         <label>Kid <select id="logChoreChild" required></select></label>
         <label>Chore <select id="logChoreChore" required></select></label>
         <button type="submit">Log chore</button>
@@ -33,9 +33,9 @@ permalink: /Admin/
 
     <section>
       <h2>Behavior Adjustment +/-</h2>
-      <form id="adjustmentForm" class="ticket-stack">
+      <form id="adjustmentForm" class="app-stack">
         <label>Kid <select id="adjustmentChild" required></select></label>
-        <label>Tickets <input id="adjustmentPoints" type="number" required></label>
+        <label>Points <input id="adjustmentPoints" type="number" required></label>
         <label>Reason <input id="adjustmentReason" type="text" placeholder="e.g. Talked back"></label>
         <button type="submit">Apply</button>
       </form>
@@ -43,7 +43,7 @@ permalink: /Admin/
 
     <section>
       <h2>Redeem a prize</h2>
-      <form id="redeemForm" class="ticket-stack">
+      <form id="redeemForm" class="app-stack">
         <label>Kid <select id="redeemChild" required></select></label>
         <label>Prize <select id="redeemPrize" required></select></label>
         <button type="submit">Redeem</button>
@@ -51,10 +51,10 @@ permalink: /Admin/
     </section>
   </div>
 
-  <div class="ticket-grid">
+  <div class="app-grid">
     <section>
       <h2>Add kid</h2>
-      <form id="addChildForm" class="ticket-stack">
+      <form id="addChildForm" class="app-stack">
         <label>Name <input id="addChildName" type="text" required></label>
         <label>Color <input id="addChildColor" type="color" value="#4a90d9"></label>
         <button type="submit">Add</button>
@@ -63,18 +63,18 @@ permalink: /Admin/
 
     <section>
       <h2>Add chore</h2>
-      <form id="addChoreForm" class="ticket-stack">
+      <form id="addChoreForm" class="app-stack">
         <label>Name <input id="addChoreName" type="text" required></label>
-        <label>Tickets <input id="addChorePoints" type="number" required></label>
+        <label>Points <input id="addChorePoints" type="number" required></label>
         <button type="submit">Add</button>
       </form>
     </section>
 
     <section>
       <h2>Add prize</h2>
-      <form id="addPrizeForm" class="ticket-stack">
+      <form id="addPrizeForm" class="app-stack">
         <label>Name <input id="addPrizeName" type="text" required></label>
-        <label>Cost (tickets) <input id="addPrizeCost" type="number" required></label>
+        <label>Cost (points) <input id="addPrizeCost" type="number" required></label>
         <label>Category
           <select id="addPrizeCategory">
             <option value="dessert">Dessert</option>
@@ -88,25 +88,25 @@ permalink: /Admin/
     </section>
   </div>
 
-  <section class="ticket-panel">
-    <div class="ticket-section-heading"><h2>Manage items</h2><span>Remove items you no longer use</span></div>
-    <div id="manageItems" class="ticket-manage-list"></div>
+  <section class="app-panel">
+    <div class="app-section-heading"><h2>Manage items</h2><span>Remove items you no longer use</span></div>
+    <div id="manageItems" class="app-manage-list"></div>
   </section>
 
   <h2>Recent activity</h2>
-  <table class="ticket-history">
+  <table class="app-history">
     <thead>
       <tr><th>When</th><th>Kid</th><th>Type</th><th>Description</th><th>Points</th></tr>
     </thead>
-    <tbody id="ticketHistoryBody"></tbody>
+    <tbody id="appHistoryBody"></tbody>
   </table>
 
   <p><a href="{{ '/Summary/' | relative_url }}">Back to Summary</a></p>
 </div>
 
-<script src="{{ '/assets/js/tickets-common.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/common.js' | relative_url }}"></script>
 <script>
   const GITHUB_REPOSITORY = "ryanbozio/ryanbozio.github.io";
   const GITHUB_BRANCH = "main";
 </script>
-<script src="{{ '/assets/js/tickets-admin.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/admin.js' | relative_url }}"></script>

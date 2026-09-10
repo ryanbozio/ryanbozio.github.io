@@ -1,23 +1,17 @@
 ---
 layout: page
 title: Summary
-permalink: /tickets/
+permalink: /Summary/
 ---
 
 <link rel="stylesheet" href="{{ '/assets/css/tickets.css' | relative_url }}">
 
-# Family Tickets
+# Summary
 
 <div class="ticket-app">
   <div id="ticketCards" class="ticket-cards"></div>
 
-  <h2>Recent activity</h2>
-  <table class="ticket-history">
-    <thead>
-      <tr><th>When</th><th>Kid</th><th>Type</th><th>Description</th><th>Points</th></tr>
-    </thead>
-    <tbody id="ticketHistoryBody"></tbody>
-  </table>
+  <p class="ticket-muted">Choose a child to see their activity.</p>
 </div>
 
 <script src="{{ '/assets/js/tickets-common.js' | relative_url }}"></script>

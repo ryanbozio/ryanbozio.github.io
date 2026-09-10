@@ -21,7 +21,7 @@
 title: Chore Store
 email: ryan.bozio@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Ticket Tracking for the Bozios
+  Action Tracking for the Bozios
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: bozio_ryan
@@ -34,8 +34,10 @@ plugins:
 
 # Explicit navigation for the site header.
 header_pages:
-  - tickets.markdown
-  - tickets-admin.markdown
+  - login.markdown
+  - summary.markdown
+  - store.markdown
+  - admin.markdown
 
 # Exclude from processing.
 # The following items will not be processed, by default.
