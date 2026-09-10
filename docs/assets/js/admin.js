@@ -191,10 +191,6 @@ function renderAll() {
     });
   });
 
-  fillSelect(document.getElementById("logChoreChild"), managedChildren, (c) => c.name);
-  fillSelect(document.getElementById("adjustmentChild"), managedChildren, (c) => c.name);
-  fillSelect(document.getElementById("redeemChild"), managedChildren, (c) => c.name);
-  fillSelect(document.getElementById("logChoreChore"), chores, (c) => `${c.name} (+${c.points})`);
   fillSelect(document.getElementById("redeemPrize"), prizes, (p) => `${p.name} (-${p.cost})`);
 
   const managedChildIds = new Set(managedChildren.map((child) => child.id));
@@ -234,24 +230,6 @@ function renderAll() {
     }
   }));
 }
-
-document.getElementById("logChoreForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const childId = document.getElementById("logChoreChild").value;
-  const choreId = document.getElementById("logChoreChore").value;
-  const chore = state.chores.find((c) => c.id === choreId);
-  if (!chore) return;
-  await submitAction("log_chore", { childId, description: chore.name, points: parseInt(chore.points, 10) });
-});
-
-document.getElementById("adjustmentForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const childId = document.getElementById("adjustmentChild").value;
-  const points = parseInt(document.getElementById("adjustmentPoints").value, 10);
-  const reason = document.getElementById("adjustmentReason").value.trim() || "Behavior adjustment";
-  if (!points) return;
-  await submitAction("adjustment", { childId, points, reason }, () => document.getElementById("adjustmentForm").reset());
-});
 
 document.getElementById("redeemForm").addEventListener("submit", async (e) => {
   e.preventDefault();

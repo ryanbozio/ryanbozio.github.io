@@ -36,7 +36,6 @@ plugins:
 header_pages:
   - login.markdown
   - summary.markdown
-  - store.markdown
   - admin.markdown
 
 # Exclude from processing.

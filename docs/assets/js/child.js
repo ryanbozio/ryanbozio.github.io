@@ -43,18 +43,46 @@ async function loadChild() {
   document.getElementById("childHeading").innerHTML = `<p class="app-kicker">CHILD ACCOUNT</p><h1>${escapeHtml(current.name)}</h1>`;
   const balance = computeBalances(ledger)[current.id] || 0;
   document.getElementById("childBalance").textContent = `${balance} points`;
-  document.getElementById("childChore").innerHTML = chores.map((chore) => `<option value="${chore.id}">${escapeHtml(chore.name)} (+${chore.points})</option>`).join("");
+  document.getElementById("childStoreLink").href = `/Store/?id=${encodeURIComponent(current.id)}`;
+  document.getElementById("childChores").innerHTML = chores.map((chore) => `<article class="app-store-item"><img src="${choreImage(chore)}" alt=""><div><h3>${escapeHtml(chore.name)}</h3><p>${chore.points} points</p><button type="button" data-chore-id="${chore.id}">Log chore</button></div></article>`).join("");
   const history = ledger.filter((entry) => entry.child_id === current.id).reverse();
   document.getElementById("childHistory").innerHTML = history.length ? history.map((entry) => `<tr><td>${escapeHtml(entry.timestamp)}</td><td>${escapeHtml(entry.type)}</td><td>${escapeHtml(entry.description)}</td><td class="${entry.points >= 0 ? "app-positive" : "app-negative"}">${entry.points > 0 ? "+" : ""}${entry.points}</td></tr>`).join("") : '<tr><td colspan="4">No activity yet.</td></tr>';
 }
 
-document.getElementById("childChoreForm").addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const chore = childState.chores.find((item) => item.id === document.getElementById("childChore").value);
+function choreImage(chore) {
+  const image = encodeURIComponent(chore.name.toLowerCase().replace(/\s+/g, ","));
+  return `https://source.unsplash.com/600x400/?${image},chores`;
+}
+
+async function logChore(chore) {
   const current = childState.children.find((child) => child.id === childId);
   try {
     await appendLedgerRow([crypto.randomUUID().slice(0, 8), new Date().toISOString(), current.id, "chore", chore.name, chore.points], `Log chore: ${chore.name}`);
     showChildStatus("Chore logged.", false);
+    await loadChild();
+  } catch (error) {
+    showChildStatus(error.message, true);
+  }
+}
+
+document.getElementById("childChores").addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-chore-id]");
+  if (!button) return;
+  const chore = childState.chores.find((item) => item.id === button.dataset.choreId);
+  button.disabled = true;
+  logChore(chore).finally(() => { button.disabled = false; });
+});
+
+document.getElementById("childAdjustmentForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const current = childState.children.find((child) => child.id === childId);
+  const points = parseInt(document.getElementById("childAdjustmentPoints").value, 10);
+  const reason = document.getElementById("childAdjustmentReason").value.trim();
+  if (!points || !reason) return;
+  try {
+    await appendLedgerRow([crypto.randomUUID().slice(0, 8), new Date().toISOString(), current.id, "adjustment", reason, points], `Adjustment: ${reason}`);
+    document.getElementById("childAdjustmentForm").reset();
+    showChildStatus("Adjustment saved.", false);
     await loadChild();
   } catch (error) {
     showChildStatus(error.message, true);

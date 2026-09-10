@@ -23,25 +23,6 @@ permalink: /Admin/
 
   <div class="app-grid">
     <section>
-      <h2>Log a chore</h2>
-      <form id="logChoreForm" class="app-stack">
-        <label>Kid <select id="logChoreChild" required></select></label>
-        <label>Chore <select id="logChoreChore" required></select></label>
-        <button type="submit">Log chore</button>
-      </form>
-    </section>
-
-    <section>
-      <h2>Behavior Adjustment +/-</h2>
-      <form id="adjustmentForm" class="app-stack">
-        <label>Kid <select id="adjustmentChild" required></select></label>
-        <label>Points <input id="adjustmentPoints" type="number" required></label>
-        <label>Reason <input id="adjustmentReason" type="text" placeholder="e.g. Talked back"></label>
-        <button type="submit">Apply</button>
-      </form>
-    </section>
-
-    <section>
       <h2>Redeem a prize</h2>
       <form id="redeemForm" class="app-stack">
         <label>Kid <select id="redeemChild" required></select></label>

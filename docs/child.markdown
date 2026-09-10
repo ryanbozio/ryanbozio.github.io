@@ -12,11 +12,17 @@ permalink: /Child/
     <div id="childHeading"></div>
   </div>
   <div id="childBalance" class="app-child-balance"></div>
+  <p><a id="childStoreLink" class="app-primary-link" href="/Store/">Open Store</a></p>
   <section class="app-panel">
-    <div class="app-section-heading"><h2>Log a chore</h2><span>Earn points</span></div>
-    <form id="childChoreForm" class="app-inline-form">
-      <select id="childChore" required></select>
-      <button type="submit">Log chore</button>
+    <div class="app-section-heading"><h2>Chores</h2><span>Earn points</span></div>
+    <div id="childChores" class="app-store-grid"></div>
+  </section>
+  <section class="app-panel">
+    <div class="app-section-heading"><h2>Behavior adjustment</h2><span>Add or remove points</span></div>
+    <form id="childAdjustmentForm" class="app-stack">
+      <label>Points <input id="childAdjustmentPoints" type="number" required></label>
+      <label>Reason <input id="childAdjustmentReason" type="text" placeholder="e.g. Great teamwork" required></label>
+      <button type="submit">Apply adjustment</button>
     </form>
   </section>
   <section class="app-panel">

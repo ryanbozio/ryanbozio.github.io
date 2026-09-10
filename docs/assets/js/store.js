@@ -8,6 +8,7 @@ const storeImages = {
   other: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=600&q=80",
 };
 let storeState = { child: null, prizes: [], ledger: [] };
+const childId = new URLSearchParams(window.location.search).get("id");
 
 function showStoreStatus(message, isError) {
   storeStatus.textContent = message;
@@ -36,7 +37,7 @@ async function redeemPrize(prize) {
 
 async function loadStore() {
   const [children, prizes, ledger] = await Promise.all([fetchCSV("/data/children.csv"), fetchCSV("/data/prizes.csv"), fetchCSV("/data/ledger.csv")]);
-  storeState.child = children.find((child) => (child.github_username || "").toLowerCase() === appSession().login);
+  storeState.child = children.find((child) => child.id === childId && (child.github_username || "").toLowerCase() === appSession().login);
   if (!storeState.child) throw new Error("No child is assigned to this account.");
   storeState.prizes = prizes;
   storeState.ledger = ledger;
