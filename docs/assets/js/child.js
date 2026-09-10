@@ -48,19 +48,13 @@ async function loadChild() {
   document.getElementById("childPrizes").innerHTML = prizes.length
     ? prizes.map((prize) => `<li>${escapeHtml(prize.description)}</li>`).join("")
     : "<li>No unused prizes.</li>";
-  document.getElementById("childChores").innerHTML = chores.map((chore) => `<article class="app-store-item"><img src="${choreImage(chore)}" alt=""><div><h3>${escapeHtml(chore.name)}</h3><p>${chore.points} points</p><button type="button" data-chore-id="${chore.id}">Log chore</button></div></article>`).join("");
+  document.getElementById("childChores").innerHTML = chores.map((chore) => `<article class="app-store-item"><img src="${choreImage(chore)}" alt="${escapeHtml(chore.name)}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80';"><div><h3>${escapeHtml(chore.name)}</h3><p>${chore.points} points</p><button type="button" data-chore-id="${chore.id}">Log chore</button></div></article>`).join("");
   const history = ledger.filter((entry) => entry.child_id === current.id).reverse();
   document.getElementById("childHistory").innerHTML = history.length ? history.map((entry) => `<tr><td>${escapeHtml(entry.timestamp)}</td><td>${escapeHtml(entry.type)}</td><td>${escapeHtml(entry.description)}</td><td class="${entry.points >= 0 ? "app-positive" : "app-negative"}">${entry.points > 0 ? "+" : ""}${entry.points}</td></tr>`).join("") : '<tr><td colspan="4">No activity yet.</td></tr>';
 }
 
 function choreImage(chore) {
-  const images = [
-    "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80",
-    "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=600&q=80",
-    "https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=600&q=80",
-    "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=600&q=80",
-  ];
-  return images[Array.from(chore.id).reduce((sum, character) => sum + character.charCodeAt(0), 0) % images.length];
+  return imageForName(chore.name, "chores");
 }
 
 async function logChore(chore) {

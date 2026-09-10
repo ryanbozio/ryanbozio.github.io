@@ -1,12 +1,6 @@
 if (!requireActionLogin()) throw new Error("Login required");
 
 const storeStatus = document.getElementById("storeStatus");
-const storeImages = {
-  dessert: "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=600&q=80",
-  money: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=600&q=80",
-  activity: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=600&q=80",
-  other: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=600&q=80",
-};
 let storeState = { child: null, prizes: [], ledger: [] };
 const childId = new URLSearchParams(window.location.search).get("id");
 
@@ -49,7 +43,7 @@ async function loadStore() {
   const balance = computeBalances(ledger)[storeState.child.id] || 0;
   document.querySelector("#storePage h1").textContent = `${storeState.child.name}'s Store`;
   document.getElementById("storeBalance").textContent = `${balance} points available`;
-  document.getElementById("storeItems").innerHTML = prizes.map((prize) => `<article class="app-store-item"><img src="${storeImages[prize.category] || storeImages.other}" alt=""><div><p class="app-kicker">${escapeHtml(prize.category || "REWARD")}</p><h2>${escapeHtml(prize.name)}</h2><p>${prize.cost} points</p><button type="button" data-prize-id="${prize.id}" ${balance < parseInt(prize.cost, 10) ? "disabled" : ""}>Redeem</button></div></article>`).join("");
+  document.getElementById("storeItems").innerHTML = prizes.map((prize) => `<article class="app-store-item"><img src="${imageForName(prize.name, prize.category || "reward")}" alt="${escapeHtml(prize.name)}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=600&q=80';"><div><p class="app-kicker">${escapeHtml(prize.category || "REWARD")}</p><h2>${escapeHtml(prize.name)}</h2><p>${prize.cost} points</p><button type="button" data-prize-id="${prize.id}" ${balance < parseInt(prize.cost, 10) ? "disabled" : ""}>Redeem</button></div></article>`).join("");
   document.querySelectorAll("#storeItems button").forEach((button) => button.addEventListener("click", async () => {
     const prize = prizes.find((item) => item.id === button.dataset.prizeId);
     button.disabled = true;
