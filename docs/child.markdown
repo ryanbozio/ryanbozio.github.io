@@ -14,6 +14,10 @@ permalink: /Child/
   <div id="childBalance" class="app-child-balance"></div>
   <p><a id="childStoreLink" class="app-primary-link" href="/Store/">Open Store</a></p>
   <section class="app-panel">
+    <div class="app-section-heading"><h2>Unused prizes</h2><span>Ready to use</span></div>
+    <ul id="childPrizes" class="app-prize-list"></ul>
+  </section>
+  <section class="app-panel">
     <div class="app-section-heading"><h2>Chores</h2><span>Earn points</span></div>
     <div id="childChores" class="app-store-grid"></div>
   </section>

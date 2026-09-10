@@ -21,7 +21,11 @@ async function renderDashboard() {
     card.className = "app-card";
     card.href = `/Child/?id=${encodeURIComponent(child.id)}`;
     card.style.borderTopColor = child.color || "#4a90d9";
-    card.innerHTML = `<h3>${escapeHtml(child.name)}</h3><p class="app-balance">${balances[child.id] || 0} 🎟️</p>`;
+    const prizes = pendingRedemptions(ledger, child.id);
+    const prizeList = prizes.length
+      ? `<div class="app-card-prizes"><strong>Unused prizes</strong><ul>${prizes.map((prize) => `<li>${escapeHtml(prize.description)}</li>`).join("")}</ul></div>`
+      : "";
+    card.innerHTML = `<h3>${escapeHtml(child.name)}</h3><p class="app-balance">${balances[child.id] || 0} 🎟️</p>${prizeList}`;
     cardsEl.appendChild(card);
   }
 }

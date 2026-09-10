@@ -97,3 +97,12 @@ function computeBalances(ledger) {
   }
   return balances;
 }
+
+function pendingRedemptions(ledger, childId) {
+  const usedIds = new Set(
+    ledger.filter((entry) => entry.type === "redemption_used").map((entry) => entry.description)
+  );
+  return ledger.filter(
+    (entry) => entry.child_id === childId && entry.type === "redemption" && !usedIds.has(entry.id)
+  );
+}
