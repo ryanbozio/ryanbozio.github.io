@@ -23,5 +23,6 @@ permalink: /Login/
 <script src="{{ '/assets/js/common.js' | relative_url }}"></script>
 <script>
   const GITHUB_REPOSITORY = "ryanbozio/ryanbozio.github.io";
+  const SUMMARY_URL = "{{ '/Summary/' | relative_url }}";
 </script>
 <script src="{{ '/assets/js/login.js' | relative_url }}"></script>

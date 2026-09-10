@@ -36,7 +36,7 @@ loginForm.addEventListener("submit", async (event) => {
       throw new Error("The browser could not save the login session. Check whether storage is blocked.");
     }
     showLoginStatus(`Verified as ${user.login}. Opening Summary...`, false);
-    setTimeout(() => window.location.assign("/Summary/"), 600);
+    setTimeout(() => window.location.assign(SUMMARY_URL), 600);
   } catch (error) {
     const message = error.name === "AbortError"
       ? "GitHub did not respond within 10 seconds. Check your network or browser extensions."
