@@ -8,6 +8,7 @@ permalink: /Store/
 
 <div class="app-app" id="storePage">
   <div class="app-page-heading">
+    <a id="storeChildLink" class="app-back-link" href="/Summary/">Back to Child</a>
     <p class="app-kicker">REWARDS</p>
     <h1>Store</h1>
     <p>Trade your points for something good.</p>

@@ -48,6 +48,8 @@ async function loadStore() {
   storeState.ledger = ledger;
   const balance = computeBalances(ledger)[storeState.child.id] || 0;
   document.querySelector("#storePage h1").textContent = `${storeState.child.name}'s Store`;
+  document.getElementById("storeChildLink").href = `/Child/?id=${encodeURIComponent(storeState.child.id)}`;
+  document.getElementById("storeChildLink").textContent = `Back to ${storeState.child.name}`;
   document.getElementById("storeBalance").textContent = `${balance} points available`;
   document.getElementById("storeItems").innerHTML = prizes.map((prize) => `<article class="app-store-item"><img src="${storeImages[prize.category] || storeImages.other}" alt="${escapeHtml(prize.name)}"><div><p class="app-kicker">${escapeHtml(prize.category || "REWARD")}</p><h2>${escapeHtml(prize.name)}</h2><p>${prize.cost} points</p><button type="button" data-prize-id="${prize.id}">Redeem</button></div></article>`).join("");
   document.querySelectorAll("#storeItems button").forEach((button) => button.addEventListener("click", async () => {

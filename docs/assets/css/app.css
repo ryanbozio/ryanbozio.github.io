@@ -15,8 +15,8 @@
 .app-card-prizes ul, .app-prize-list { list-style: none; margin: 0.35rem 0 0; padding: 0; }
 .app-card-prizes li, .app-prize-list li { color: #475467; font-size: 0.9rem; padding: 0.2rem 0; }
 .app-prizes { list-style: none; margin: 0.8rem 0 0; padding: 0; }
-.app-prizes li { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #eee; }
-.app-prizes button { padding: 0.25rem 0.5rem; }
+.app-prizes li, .app-prize-list li { align-items: center; border-top: 1px solid #eee; display: flex; justify-content: space-between; gap: 1rem; padding: 0.75rem 0; }
+.app-prizes button, .app-prize-list button { flex: 0 0 auto; margin-left: 1rem; padding: 0.35rem 0.75rem; }
 .app-history { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; }
 .app-history th, .app-history td { padding: 0.5rem 0.75rem; border-bottom: 1px solid #eee; text-align: left; font-size: 0.9rem; }
 .app-positive { color: #1a7f37; font-weight: bold; }
@@ -45,6 +45,8 @@
 .app-page-heading h1, .app-hero h1 { margin: 0; }
 .app-back-link { display: inline-block; margin-bottom: 1rem; }
 .app-child-balance { color: #176b5b; font-size: 2rem; font-weight: 700; margin: 1rem 0 1.5rem; }
+.app-primary-link { background: #176b5b; border-radius: 8px; color: #fff; display: inline-block; font-size: 1.1rem; font-weight: 700; margin: 0.5rem 0 1.25rem; padding: 0.8rem 1.2rem; text-decoration: none; }
+.app-primary-link:hover { background: #105044; color: #fff; }
 .app-muted { color: #667085; }
 .app-section-heading { align-items: baseline; display: flex; justify-content: space-between; gap: 1rem; }
 .app-section-heading span { color: #667085; font-size: 0.85rem; }
