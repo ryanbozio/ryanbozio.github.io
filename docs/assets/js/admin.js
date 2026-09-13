@@ -87,7 +87,7 @@ async function saveAction(action, payload) {
       await appendCsvRow("docs/data/children.csv", [newId(), payload.name, payload.color || "#4a90d9", payload.githubUsername], `Add child ${payload.name}`);
       break;
     case "add_chore":
-      await appendCsvRow("docs/data/chores.csv", [newId(), payload.name, payload.points], `Add chore ${payload.name}`);
+      await appendCsvRow("docs/data/chores.csv", [newId(), payload.name, payload.points, payload.category], `Add chore ${payload.name}`);
       break;
     case "add_prize":
       await appendCsvRow("docs/data/prizes.csv", [newId(), payload.name, payload.cost, payload.category || "other"], `Add prize ${payload.name}`);
@@ -244,8 +244,9 @@ document.getElementById("addChoreForm").addEventListener("submit", async (e) => 
   e.preventDefault();
   const name = document.getElementById("addChoreName").value.trim();
   const points = parseInt(document.getElementById("addChorePoints").value, 10);
+  const category = document.getElementById("addChoreCategory").value;
   if (!name || Number.isNaN(points)) return;
-  await submitAction("add_chore", { name, points }, () => document.getElementById("addChoreForm").reset());
+  await submitAction("add_chore", { name, points, category }, () => document.getElementById("addChoreForm").reset());
 });
 
 document.getElementById("addPrizeForm").addEventListener("submit", async (e) => {

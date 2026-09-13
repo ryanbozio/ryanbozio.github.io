@@ -39,6 +39,15 @@ permalink: /Admin/
       <form id="addChoreForm" class="app-stack">
         <label>Name <input id="addChoreName" type="text" required></label>
         <label>Points <input id="addChorePoints" type="number" required></label>
+        <label>Category
+          <select id="addChoreCategory" required>
+            <option value="Kitchen">Kitchen</option>
+            <option value="Dining Table">Dining Table</option>
+            <option value="Bathroom">Bathroom</option>
+            <option value="Bedroom">Bedroom</option>
+            <option value="Yardwork">Yardwork</option>
+          </select>
+        </label>
         <button type="submit">Add</button>
       </form>
     </section>
