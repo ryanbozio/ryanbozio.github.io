@@ -17,10 +17,9 @@
           {% for path in site.header_pages %}
             {% assign my_page = site.pages | where: "path", path | first %}
             {% if my_page.title %}
-              <a class="page-link{% if my_page.path == 'login.markdown' %} auth-nav-link{% endif %}" href="{{ my_page.url | relative_url }}"{% if my_page.path == 'login.markdown' %} id="authNavLink"{% endif %}>{{ my_page.title | escape }}</a>
+              <a class="page-link{% if my_page.path == 'login.markdown' %} auth-nav-link{% endif %}" href="{{ my_page.url | relative_url }}"{% if my_page.path == 'login.markdown' %} id="authNavLink"{% elsif my_page.path == 'cart.markdown' %} id="cartNavLink"{% endif %}>{% if my_page.path == 'cart.markdown' %}Cart (<span id="cartCount">0</span>){% else %}{{ my_page.title | escape }}{% endif %}</a>
             {% endif %}
           {% endfor %}
-          <a class="page-link" href="{{ '/Cart/' | relative_url }}">Cart (<span id="cartCount">0</span>)</a>
         </div>
       </nav>
     {% endif %}
