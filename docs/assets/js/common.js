@@ -122,6 +122,14 @@ async function applyPendingCart() {
       additions["docs/data/ledger.csv"].push(row);
       ledger.push({ id: row[0], timestamp: row[1], child_id: row[2], type: row[3], description: row[4], points: row[5] });
       balances[payload.childId] = (balances[payload.childId] || 0) + Number(payload.points || 0);
+    } else if (queued.action === "adjustment") {
+      requireChild(payload.childId);
+      const points = Number(payload.points);
+      if (!Number.isFinite(points) || points === 0 || !payload.reason) throw new Error("Cannot apply cart: the behavior adjustment is invalid.");
+      const row = [crypto.randomUUID().slice(0, 8), new Date().toISOString(), payload.childId, "adjustment", payload.reason, points];
+      additions["docs/data/ledger.csv"].push(row);
+      ledger.push({ id: row[0], timestamp: row[1], child_id: row[2], type: row[3], description: row[4], points: row[5] });
+      balances[payload.childId] = (balances[payload.childId] || 0) + points;
     } else if (queued.action === "redeem") {
       requireChild(payload.childId);
       const cost = Math.abs(Number(payload.cost));

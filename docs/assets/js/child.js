@@ -90,20 +90,15 @@ document.getElementById("childPrizes").addEventListener("click", async (event) =
   showChildStatus("Prize use added to cart.", false);
 });
 
-document.getElementById("childAdjustmentForm").addEventListener("submit", async (event) => {
+document.getElementById("childAdjustmentForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const current = childState.children.find((child) => child.id === childId);
   const points = parseInt(document.getElementById("childAdjustmentPoints").value, 10);
   const reason = document.getElementById("childAdjustmentReason").value.trim();
   if (!points || !reason) return;
-  try {
-    await appendLedgerRow([crypto.randomUUID().slice(0, 8), new Date().toISOString(), current.id, "adjustment", reason, points], `Adjustment: ${reason}`);
-    document.getElementById("childAdjustmentForm").reset();
-    showChildStatus("Adjustment saved.", false);
-    await loadChild();
-  } catch (error) {
-    showChildStatus(error.message, true);
-  }
+  addPendingAction("adjustment", { childId: current.id, reason, points }, `Adjustment: ${reason} (${points > 0 ? "+" : ""}${points} Bozio Bucks)`);
+  document.getElementById("childAdjustmentForm").reset();
+  showChildStatus("Adjustment added to cart.", false);
 });
 
 loadChild().catch((error) => showChildStatus(error.message, true));
