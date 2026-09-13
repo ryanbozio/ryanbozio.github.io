@@ -51,17 +51,6 @@ function csvField(value) {
   return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
 }
 
-function prizeImage(category, cost) {
-  if (category === "Money") {
-    return { 20: "$5.jpeg", 40: "$10.jpeg", 75: "$20.jpeg" }[cost] || "special-outing.jpeg";
-  }
-  return {
-    Time: "15-minutes.jpeg",
-    Movie: "movie.jpeg",
-    Outing: "special-outing.jpeg",
-  }[category] || "special-outing.jpeg";
-}
-
 function newId() {
   return crypto.randomUUID().slice(0, 8);
 }
@@ -101,7 +90,7 @@ async function saveAction(action, payload) {
       await appendCsvRow("docs/data/chores.csv", [newId(), payload.name, payload.points, payload.category], `Add chore ${payload.name}`);
       break;
     case "add_prize":
-      await appendCsvRow("docs/data/prizes.csv", [newId(), payload.name, payload.cost, payload.category, prizeImage(payload.category, payload.cost)], `Add prize ${payload.name}`);
+      await appendCsvRow("docs/data/prizes.csv", [newId(), payload.name, payload.cost, payload.category], `Add prize ${payload.name}`);
       break;
     case "log_chore":
     case "adjustment":
