@@ -57,6 +57,7 @@ function choreImage(chore) {
   const imageByCategory = {
     Kitchen: "kitchen.jpeg",
     Dining: "dining-table.jpeg",
+    Trash: "trash.jpeg",
     Bathroom: "bathroom.jpeg",
     Bedroom: "bedroom.jpeg",
     Yardwork: "yardwork.jpeg",
