@@ -45,8 +45,8 @@
 .app-page-heading h1, .app-hero h1 { margin: 0; }
 .app-back-link { display: inline-block; margin-bottom: 1rem; }
 .app-child-balance { color: #176b5b; font-size: 2rem; font-weight: 700; margin: 1rem 0 1.5rem; }
-.app-primary-link { background: #4a90d9; border-radius: 4px; color: #fff; display: inline-block; font: inherit; margin: 0.5rem 0 1.25rem; padding: 0.4rem; text-decoration: none; }
-.app-primary-link:hover { background: #3a78bd; color: #fff; }
+#childPage a.app-primary-link { background: #4a90d9 !important; border-radius: 4px; color: #fff !important; display: inline-block; font: inherit; margin: 0.5rem 0 1.25rem; padding: 0.4rem; text-decoration: none; }
+#childPage a.app-primary-link:hover { background: #3a78bd !important; color: #fff !important; }
 .app-muted { color: #667085; }
 .app-section-heading { align-items: baseline; display: flex; justify-content: space-between; gap: 1rem; }
 .app-section-heading span { color: #667085; font-size: 0.85rem; }
