@@ -1,12 +1,7 @@
 if (!requireActionLogin()) throw new Error("Login required");
 
 const storeStatus = document.getElementById("storeStatus");
-const storeImages = {
-  dessert: "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=600&q=80",
-  money: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=600&q=80",
-  activity: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=600&q=80",
-  other: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=600&q=80",
-};
+const storeImageFallback = "/assets/images/store/special-outing.jpeg";
 let storeState = { child: null, prizes: [], ledger: [] };
 const childId = new URLSearchParams(window.location.search).get("id");
 
@@ -51,7 +46,7 @@ async function loadStore() {
   document.getElementById("storeChildLink").href = `/Child/?id=${encodeURIComponent(storeState.child.id)}`;
   document.getElementById("storeChildLink").textContent = `Back to ${storeState.child.name}`;
   document.getElementById("storeBalance").textContent = `${balance} points available`;
-  document.getElementById("storeItems").innerHTML = prizes.map((prize) => `<article class="app-store-item"><img src="${storeImages[prize.category] || storeImages.other}" alt="${escapeHtml(prize.name)}"><div><p class="app-kicker">${escapeHtml(prize.category || "REWARD")}</p><h2>${escapeHtml(prize.name)}</h2><p>${prize.cost} points</p><button type="button" data-prize-id="${prize.id}">Redeem</button></div></article>`).join("");
+  document.getElementById("storeItems").innerHTML = prizes.map((prize) => `<article class="app-store-item"><img src="/assets/images/store/${encodeURIComponent(prize.image || "special-outing.jpeg")}" alt="${escapeHtml(prize.name)}" onerror="this.onerror=null;this.src='${storeImageFallback}'"><div><p class="app-kicker">${escapeHtml(prize.category || "REWARD")}</p><h2>${escapeHtml(prize.name)}</h2><p>${prize.cost} points</p><button type="button" data-prize-id="${prize.id}">Redeem</button></div></article>`).join("");
   document.querySelectorAll("#storeItems button").forEach((button) => button.addEventListener("click", async () => {
     const prize = prizes.find((item) => item.id === button.dataset.prizeId);
     const currentBalance = computeBalances(storeState.ledger)[storeState.child.id] || 0;

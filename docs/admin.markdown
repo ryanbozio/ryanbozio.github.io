@@ -59,10 +59,10 @@ permalink: /Admin/
         <label>Cost (points) <input id="addPrizeCost" type="number" required></label>
         <label>Category
           <select id="addPrizeCategory">
-            <option value="dessert">Dessert</option>
-            <option value="money">Money</option>
-            <option value="activity">Activity</option>
-            <option value="other" selected>Other</option>
+            <option value="Time">Time</option>
+            <option value="Movie">Movie</option>
+            <option value="Money">Money</option>
+            <option value="Outing" selected>Outing</option>
           </select>
         </label>
         <button type="submit">Add</button>
