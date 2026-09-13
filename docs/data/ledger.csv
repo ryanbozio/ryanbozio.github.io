@@ -5,3 +5,4 @@ id,timestamp,child_id,type,description,points
 c9decee2,2026-09-10T03:07:08.464Z,f6d37306,chore,Clean Bathroom,3
 92303d0a,2026-09-10T03:09:57.475Z,f6d37306,redemption,+15 min special time,-5
 ad503731,2026-09-13T19:16:18.175Z,f6d37306,redemption_used,92303d0a,0
+36ea3056,2026-09-13T19:32:04.805Z,f6d37306,chore,Load Dishwasher,2
