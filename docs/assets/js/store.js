@@ -57,13 +57,13 @@ async function loadStore() {
   document.querySelector("#storePage h1").textContent = `${storeState.child.name}'s Store`;
   document.getElementById("storeChildLink").href = `/Child/?id=${encodeURIComponent(storeState.child.id)}`;
   document.getElementById("storeChildLink").textContent = `Back to ${storeState.child.name}`;
-  document.getElementById("storeBalance").textContent = `${balance} points available`;
-  document.getElementById("storeItems").innerHTML = prizes.map((prize) => `<article class="app-store-item"><img src="${storeImage(prize)}" alt="${escapeHtml(prize.name)}" onerror="this.onerror=null;this.src='${storeImageFallback}'"><div><p class="app-kicker">${escapeHtml(prize.category || "REWARD")}</p><h2>${escapeHtml(prize.name)}</h2><p>${prize.cost} points</p><button type="button" data-prize-id="${prize.id}">Redeem</button></div></article>`).join("");
+  document.getElementById("storeBalance").textContent = `${balance} Bozio Bucks available`;
+  document.getElementById("storeItems").innerHTML = prizes.map((prize) => `<article class="app-store-item"><img src="${storeImage(prize)}" alt="${escapeHtml(prize.name)}" onerror="this.onerror=null;this.src='${storeImageFallback}'"><div><p class="app-kicker">${escapeHtml(prize.category || "REWARD")}</p><h2>${escapeHtml(prize.name)}</h2><p>${prize.cost} Bozio Bucks</p><button type="button" data-prize-id="${prize.id}">Redeem</button></div></article>`).join("");
   document.querySelectorAll("#storeItems button").forEach((button) => button.addEventListener("click", async () => {
     const prize = prizes.find((item) => item.id === button.dataset.prizeId);
     const currentBalance = computeBalances(storeState.ledger)[storeState.child.id] || 0;
     if (currentBalance < parseInt(prize.cost, 10)) {
-      showStoreStatus("Not enough points for that prize.", true);
+      showStoreStatus("Not enough Bozio Bucks for that prize.", true);
       return;
     }
     button.disabled = true;

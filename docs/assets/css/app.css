@@ -44,7 +44,7 @@
 .app-page-heading { margin: 1.5rem 0; }
 .app-page-heading h1, .app-hero h1 { margin: 0; }
 .app-back-link { display: inline-block; margin-bottom: 1rem; }
-.app-child-balance { color: #176b5b; font-size: 2rem; font-weight: 700; margin: 1rem 0 1.5rem; }
+.app-child-balance { color: #e16b3a; font-size: 2rem; font-weight: 700; margin: 1rem 0 1.5rem; }
 #childPage a.app-store-link { background: #4a90d9; border-radius: 4px; color: #fff; display: inline-block; font: inherit; margin: 0.5rem 0 1.25rem; padding: 0.4rem; text-decoration: none; }
 #childPage a.app-store-link:hover { background: #3a78bd; color: #fff; }
 .app-muted { color: #667085; }

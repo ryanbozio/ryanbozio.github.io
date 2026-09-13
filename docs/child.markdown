@@ -18,20 +18,20 @@ permalink: /Child/
     <ul id="childPrizes" class="app-prize-list"></ul>
   </section>
   <section class="app-panel">
-    <div class="app-section-heading"><h2>Chores</h2><span>Earn points</span></div>
+    <div class="app-section-heading"><h2>Chores</h2><span>Earn Bozio Bucks</span></div>
     <div id="childChores" class="app-store-grid"></div>
   </section>
   <section class="app-panel">
-    <div class="app-section-heading"><h2>Behavior adjustment</h2><span>Add or remove points</span></div>
+    <div class="app-section-heading"><h2>Behavior adjustment</h2><span>Add or remove Bozio Bucks</span></div>
     <form id="childAdjustmentForm" class="app-stack">
-      <label>Points <input id="childAdjustmentPoints" type="number" required></label>
+      <label>Bozio Bucks <input id="childAdjustmentPoints" type="number" required></label>
       <label>Reason <input id="childAdjustmentReason" type="text" placeholder="e.g. Great teamwork" required></label>
       <button type="submit">Apply adjustment</button>
     </form>
   </section>
   <section class="app-panel">
     <div class="app-section-heading"><h2>Activity log</h2><span>Most recent first</span></div>
-    <table class="app-history"><thead><tr><th>When</th><th>Type</th><th>Description</th><th>Points</th></tr></thead><tbody id="childHistory"></tbody></table>
+    <table class="app-history"><thead><tr><th>When</th><th>Type</th><th>Description</th><th>Bozio Bucks</th></tr></thead><tbody id="childHistory"></tbody></table>
   </section>
   <div id="childStatus" class="app-status"></div>
 </div>

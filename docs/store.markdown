@@ -11,7 +11,7 @@ permalink: /Store/
     <a id="storeChildLink" class="app-back-link" href="/Summary/">Back to Child</a>
     <p class="app-kicker">REWARDS</p>
     <h1>Store</h1>
-    <p>Trade your points for something good.</p>
+    <p>Trade your Bozio Bucks for something good.</p>
   </div>
   <div id="storeBalance" class="app-child-balance"></div>
   <div id="storeItems" class="app-store-grid"></div>

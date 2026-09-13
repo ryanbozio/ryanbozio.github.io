@@ -38,7 +38,7 @@ permalink: /Admin/
       <h2>Add chore</h2>
       <form id="addChoreForm" class="app-stack">
         <label>Name <input id="addChoreName" type="text" required></label>
-        <label>Points <input id="addChorePoints" type="number" required></label>
+        <label>Bozio Bucks <input id="addChorePoints" type="number" required></label>
         <label>Category
           <select id="addChoreCategory" required>
             <option value="Kitchen">Kitchen</option>
@@ -56,7 +56,7 @@ permalink: /Admin/
       <h2>Add prize</h2>
       <form id="addPrizeForm" class="app-stack">
         <label>Name <input id="addPrizeName" type="text" required></label>
-        <label>Cost (points) <input id="addPrizeCost" type="number" required></label>
+        <label>Cost (Bozio Bucks) <input id="addPrizeCost" type="number" required></label>
         <label>Category
           <select id="addPrizeCategory">
             <option value="Time">Time</option>
@@ -78,7 +78,7 @@ permalink: /Admin/
   <h2>Recent activity</h2>
   <table class="app-history">
     <thead>
-      <tr><th>When</th><th>Kid</th><th>Type</th><th>Description</th><th>Points</th></tr>
+      <tr><th>When</th><th>Kid</th><th>Type</th><th>Description</th><th>Bozio Bucks</th></tr>
     </thead>
     <tbody id="appHistoryBody"></tbody>
   </table>
