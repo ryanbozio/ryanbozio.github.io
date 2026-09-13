@@ -37,6 +37,7 @@ header_pages:
   - login.markdown
   - summary.markdown
   - admin.markdown
+  - cart.markdown
 
 # Exclude from processing.
 # The following items will not be processed, by default.

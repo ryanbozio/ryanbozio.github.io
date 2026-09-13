@@ -186,8 +186,14 @@ function renderAll() {
 
   cardsEl.querySelectorAll(".app-use-prize").forEach((button) => {
     button.addEventListener("click", () => {
+      addPendingAction(
+        "use_redemption",
+        { childId: button.dataset.childId, redemptionId: button.dataset.redemptionId },
+        "Use redeemed prize"
+      );
       button.disabled = true;
-      submitAction("use_redemption", { childId: button.dataset.childId, redemptionId: button.dataset.redemptionId });
+      button.textContent = "In cart";
+      showStatus("Prize use added to cart.", false);
     });
   });
 
@@ -246,7 +252,9 @@ document.getElementById("addChoreForm").addEventListener("submit", async (e) => 
   const points = parseInt(document.getElementById("addChorePoints").value, 10);
   const category = document.getElementById("addChoreCategory").value;
   if (!name || Number.isNaN(points)) return;
-  await submitAction("add_chore", { name, points, category }, () => document.getElementById("addChoreForm").reset());
+  addPendingAction("add_chore", { name, points, category }, `Add chore: ${name}`);
+  document.getElementById("addChoreForm").reset();
+  showStatus("Chore added to cart.", false);
 });
 
 document.getElementById("addPrizeForm").addEventListener("submit", async (e) => {
@@ -255,7 +263,9 @@ document.getElementById("addPrizeForm").addEventListener("submit", async (e) => 
   const cost = parseInt(document.getElementById("addPrizeCost").value, 10);
   const category = document.getElementById("addPrizeCategory").value;
   if (!name || Number.isNaN(cost)) return;
-  await submitAction("add_prize", { name, cost, category }, () => document.getElementById("addPrizeForm").reset());
+  addPendingAction("add_prize", { name, cost, category }, `Add prize: ${name}`);
+  document.getElementById("addPrizeForm").reset();
+  showStatus("Prize added to cart.", false);
 });
 
 document.getElementById("githubConnect").addEventListener("click", () => {

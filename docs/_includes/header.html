@@ -20,6 +20,7 @@
               <a class="page-link{% if my_page.path == 'login.markdown' %} auth-nav-link{% endif %}" href="{{ my_page.url | relative_url }}"{% if my_page.path == 'login.markdown' %} id="authNavLink"{% endif %}>{{ my_page.title | escape }}</a>
             {% endif %}
           {% endfor %}
+          <a class="page-link" href="{{ '/Cart/' | relative_url }}">Cart (<span id="cartCount">0</span>)</a>
         </div>
       </nav>
     {% endif %}
@@ -38,6 +39,7 @@
       event.preventDefault();
       sessionStorage.removeItem("familyAppGithubToken");
       sessionStorage.removeItem("familyAppGithubLogin");
+      sessionStorage.removeItem("familyAppPendingActions");
       window.location.assign("/Login/");
     });
   })();

@@ -57,6 +57,14 @@
 .app-store-item img { display: block; height: 150px; object-fit: cover; width: 100%; }
 .app-store-item > div { padding: 1rem; }
 .app-store-item h2 { margin: 0.25rem 0; }
+.app-cart-list { list-style: none; margin: 0; padding: 0; }
+.app-cart-list li { align-items: center; border-bottom: 1px solid #eaecf0; display: flex; justify-content: space-between; gap: 1rem; padding: 0.75rem 0; }
+.app-cart-list li:last-child { border-bottom: none; }
+.app-cart-list button, .app-secondary-button { background: #667085; }
+.app-cart-actions { display: flex; gap: 0.75rem; margin: 1rem 0; }
+.app-cart-actions button { cursor: pointer; font: inherit; padding: 0.4rem 0.75rem; border: none; border-radius: 4px; background: #4a90d9; color: #fff; }
+.app-cart-actions button:hover { background: #3a78bd; }
+.app-cart-actions .app-secondary-button:hover { background: #475467; }
 .app-manage-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
 .app-manage-row { align-items: center; border-bottom: 1px solid #eaecf0; display: flex; justify-content: space-between; gap: 0.75rem; padding: 0.55rem 0; }
 .app-manage-row button { background: #b42318; padding: 0.25rem 0.55rem; }

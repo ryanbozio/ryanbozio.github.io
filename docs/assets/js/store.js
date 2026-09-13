@@ -30,23 +30,6 @@ function storeBase64(text) {
   return btoa(String.fromCharCode(...new TextEncoder().encode(text)));
 }
 
-async function redeemPrize(prize) {
-  const path = "docs/data/ledger.csv";
-  for (let attempt = 0; attempt < 3; attempt++) {
-    const fileResponse = await fetch(`https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${path}?ref=main`, { headers: storeHeaders() });
-    const file = await fileResponse.json();
-    if (!fileResponse.ok) throw new Error(file.message || "Could not read the ledger.");
-    const current = new TextDecoder().decode(Uint8Array.from(atob(file.content.replace(/\n/g, "")), (char) => char.charCodeAt(0)));
-    const row = [crypto.randomUUID().slice(0, 8), new Date().toISOString(), storeState.child.id, "redemption", prize.name, -Math.abs(prize.cost)];
-    const csvRow = row.map((value) => String(value).includes(",") ? `"${String(value).replace(/"/g, '""')}"` : value).join(",");
-    const updated = `${current.replace(/\n?$/, "")}\n${csvRow}\n`;
-    const saveResponse = await fetch(`https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${path}`, { method: "PUT", headers: { ...storeHeaders(), "Content-Type": "application/json" }, body: JSON.stringify({ message: `Redeem ${prize.name}`, content: storeBase64(updated), sha: file.sha, branch: "main" }) });
-    if (saveResponse.ok) return;
-    const error = await saveResponse.json();
-    if (saveResponse.status !== 409 || attempt === 2) throw new Error(error.message || "Could not redeem that prize.");
-  }
-}
-
 async function loadStore() {
   const [children, prizes, ledger] = await Promise.all([fetchCSV("/data/children.csv"), fetchCSV("/data/prizes.csv"), fetchCSV("/data/ledger.csv")]);
   storeState.child = children.find((child) => child.id === childId && (child.github_username || "").toLowerCase() === appSession().login);
@@ -59,25 +42,12 @@ async function loadStore() {
   document.getElementById("storeChildLink").textContent = `Back to ${storeState.child.name}`;
   document.getElementById("storeBalance").textContent = `${balance} Bozio Bucks available`;
   document.getElementById("storeItems").innerHTML = prizes.map((prize) => `<article class="app-store-item"><img src="${storeImage(prize)}" alt="${escapeHtml(prize.name)}" onerror="this.onerror=null;this.src='${storeImageFallback}'"><div><p class="app-kicker">${escapeHtml(prize.category || "REWARD")}</p><h2>${escapeHtml(prize.name)}</h2><p>${prize.cost} Bozio Bucks</p><button type="button" data-prize-id="${prize.id}">Redeem</button></div></article>`).join("");
-  document.querySelectorAll("#storeItems button").forEach((button) => button.addEventListener("click", async () => {
+  document.querySelectorAll("#storeItems button").forEach((button) => button.addEventListener("click", () => {
     const prize = prizes.find((item) => item.id === button.dataset.prizeId);
-    const currentBalance = computeBalances(storeState.ledger)[storeState.child.id] || 0;
-    if (currentBalance < parseInt(prize.cost, 10)) {
-      showStoreStatus("Not enough Bozio Bucks for that prize.", true);
-      return;
-    }
+    addPendingAction("redeem", { childId: storeState.child.id, name: prize.name, cost: prize.cost }, `Redeem: ${prize.name}`);
     button.disabled = true;
-    button.textContent = "Redeeming...";
-    showStoreStatus("Redeeming...", false);
-    try {
-      await redeemPrize(prize);
-      showStoreStatus(`${prize.name} redeemed.`, false);
-      await loadStore();
-    } catch (error) {
-      button.disabled = false;
-      button.textContent = "Redeem";
-      showStoreStatus(error.message, true);
-    }
+    button.textContent = "In cart";
+    showStoreStatus(`${prize.name} added to cart.`, false);
   }));
 }
 

@@ -67,13 +67,8 @@ function choreImage(chore) {
 
 async function logChore(chore) {
   const current = childState.children.find((child) => child.id === childId);
-  try {
-    await appendLedgerRow([crypto.randomUUID().slice(0, 8), new Date().toISOString(), current.id, "chore", chore.name, chore.points], `Log chore: ${chore.name}`);
-    showChildStatus("Chore logged.", false);
-    await loadChild();
-  } catch (error) {
-    showChildStatus(error.message, true);
-  }
+  addPendingAction("log_chore", { childId: current.id, description: chore.name, points: chore.points }, `Log chore: ${chore.name}`);
+  showChildStatus("Chore added to cart.", false);
 }
 
 document.getElementById("childChores").addEventListener("click", (event) => {
@@ -81,26 +76,18 @@ document.getElementById("childChores").addEventListener("click", (event) => {
   if (!button) return;
   const chore = childState.chores.find((item) => item.id === button.dataset.choreId);
   button.disabled = true;
-  button.textContent = "Logging...";
+  button.textContent = "In cart";
   showChildStatus(`Logging ${chore.name}...`, false);
-  logChore(chore).finally(() => {
-    button.disabled = false;
-    button.textContent = "Log chore";
-  });
+  logChore(chore);
 });
 
 document.getElementById("childPrizes").addEventListener("click", async (event) => {
   const button = event.target.closest("button[data-use-prize-id]");
   if (!button) return;
   button.disabled = true;
-  try {
-    await appendLedgerRow([crypto.randomUUID().slice(0, 8), new Date().toISOString(), childId, "redemption_used", button.dataset.usePrizeId, 0], `Use redeemed prize: ${button.dataset.usePrizeId}`);
-    showChildStatus("Prize marked as used.", false);
-    await loadChild();
-  } catch (error) {
-    button.disabled = false;
-    showChildStatus(error.message, true);
-  }
+  addPendingAction("use_redemption", { childId, redemptionId: button.dataset.usePrizeId }, "Use redeemed prize");
+  button.textContent = "In cart";
+  showChildStatus("Prize use added to cart.", false);
 });
 
 document.getElementById("childAdjustmentForm").addEventListener("submit", async (event) => {
