@@ -40,7 +40,7 @@ async function loadChild() {
   const current = children.find((child) => child.id === childId && (child.github_username || "").toLowerCase() === appSession().login);
   if (!current) throw new Error("That child is not available for this account.");
   childState = { children, chores, ledger };
-  document.getElementById("childHeading").innerHTML = `<p class="app-kicker">${escapeHtml(current.name)}'S ACCOUNT</p>`;
+  document.getElementById("childHeading").innerHTML = `<p class="app-kicker">${escapeHtml(current.name.toUpperCase())}'S ACCOUNT</p>`;
   const balance = computeBalances(ledger)[current.id] || 0;
   document.getElementById("childBalance").textContent = `${balance} Bozio Bucks 🎟️`;
   document.getElementById("childStoreLink").href = `/Store/?id=${encodeURIComponent(current.id)}`;
