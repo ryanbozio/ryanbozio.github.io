@@ -1,9 +1,1 @@
 id,timestamp,child_id,type,description,points
-c1fd0611,2026-09-13T19:37:46.004Z,f6d37306,adjustment,Listening Outside,2
-0c50b7b1,2026-09-14T02:21:47.602Z,f6d37306,chore,Yardwork,3
-0b15318b,2026-09-14T02:21:47.602Z,f6d37306,chore,Clean Room,2
-e7c432d4,2026-09-14T02:21:47.602Z,f6d37306,chore,Clean Bathroom,3
-d351c567,2026-09-14T02:21:47.602Z,f6d37306,chore,Vacuum Main Floor,2
-d5fb97b2,2026-09-14T02:21:47.602Z,f6d37306,chore,Load Dishwasher,2
-ce13777b,2026-09-14T02:21:47.602Z,f6d37306,chore,Empty Dishwasher,2
-adc52c22,2026-09-14T02:21:47.602Z,f6d37306,redemption,Pick Family Movie,-15
