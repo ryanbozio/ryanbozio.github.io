@@ -183,7 +183,7 @@ function renderAll() {
         const prizeList = prizes.length
           ? `<ul class="app-prizes">${prizes.map((prize) => `<li><span>${escapeHtml(prize.description)}</span><button type="button" class="app-use-prize" data-child-id="${escapeHtml(c.id)}" data-redemption-id="${escapeHtml(prize.id)}">Use</button></li>`).join("")}</ul>`
           : "";
-        return `<div class="app-card" style="border-top-color:${c.color || "#4a90d9"}"><h3>${escapeHtml(c.name)}</h3><p class="app-balance">${balances[c.id] || 0} 🎟️</p>${prizeList}</div>`;
+        return `<div class="app-card app-card-link" role="link" tabindex="0" data-child-url="/Child/?id=${encodeURIComponent(c.id)}" style="border-top-color:${c.color || "#4a90d9"}"><h3>${escapeHtml(c.name)}</h3><p class="app-balance">${balances[c.id] || 0} 🎟️</p>${prizeList}</div>`;
       }
     )
     .join("") || `<p>${githubLogin ? "No kids are assigned to this GitHub account." : "Connect a GitHub token to manage kids."}</p>`;
@@ -198,6 +198,20 @@ function renderAll() {
       button.disabled = true;
       button.textContent = "In cart";
       showStatus("Prize use added to cart.", false);
+    });
+  });
+
+  cardsEl.querySelectorAll(".app-card-link").forEach((card) => {
+    const openChild = (event) => {
+      if (event.target.closest("button")) return;
+      window.location.assign(card.dataset.childUrl);
+    };
+    card.addEventListener("click", openChild);
+    card.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openChild(event);
+      }
     });
   });
 
