@@ -1,22 +1,12 @@
 ---
 layout: page
-title: Admin
+title: Parent Admin
 permalink: /Admin/
 ---
 
 <link rel="stylesheet" href="{{ '/assets/css/app.css' | relative_url }}">
 
-# Parent Admin
-
 <div class="app-app">
-  <div class="app-auth">
-    <label for="githubToken">GitHub token</label>
-    <input id="githubToken" type="password" autocomplete="off" placeholder="github_pat_...">
-    <button id="githubConnect" type="button">Connect</button>
-    <button id="githubSignOut" type="button" hidden>Disconnect</button>
-    <span id="githubIdentity"></span>
-  </div>
-
   <div id="appStatus" class="app-status"></div>
 
   <div id="appCards" class="app-cards"></div>
