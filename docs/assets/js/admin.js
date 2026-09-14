@@ -4,7 +4,7 @@ if (!requireActionLogin()) throw new Error("Login required");
 
 const GITHUB_TOKEN_STORAGE_KEY = "familyAppGithubToken";
 let githubToken = sessionStorage.getItem(GITHUB_TOKEN_STORAGE_KEY);
-let githubLogin = "";
+let githubLogin = appSession().login || "";
 
 function showStatus(message, isError) {
   const el = document.getElementById("appStatus");
@@ -13,10 +13,14 @@ function showStatus(message, isError) {
 }
 
 function updateAuthControls(login = "") {
-  document.getElementById("githubToken").hidden = Boolean(githubToken);
-  document.getElementById("githubConnect").hidden = Boolean(githubToken);
-  document.getElementById("githubSignOut").hidden = !githubToken;
-  document.getElementById("githubIdentity").textContent = login ? `Signed in as ${login}` : githubToken ? "Signed in" : "";
+  const tokenInput = document.getElementById("githubToken");
+  const connectButton = document.getElementById("githubConnect");
+  const signOutButton = document.getElementById("githubSignOut");
+  const identity = document.getElementById("githubIdentity");
+  if (tokenInput) tokenInput.hidden = Boolean(githubToken);
+  if (connectButton) connectButton.hidden = Boolean(githubToken);
+  if (signOutButton) signOutButton.hidden = !githubToken;
+  if (identity) identity.textContent = login ? `Signed in as ${login}` : githubToken ? "Signed in" : "";
 }
 
 async function githubApi(path, options = {}) {
@@ -268,7 +272,8 @@ document.getElementById("addPrizeForm").addEventListener("submit", async (e) => 
   showStatus("Prize added to cart.", false);
 });
 
-document.getElementById("githubConnect").addEventListener("click", () => {
+const githubConnectButton = document.getElementById("githubConnect");
+if (githubConnectButton) githubConnectButton.addEventListener("click", () => {
   connectGitHub().catch((error) => {
     githubToken = null;
     updateAuthControls();
@@ -276,11 +281,13 @@ document.getElementById("githubConnect").addEventListener("click", () => {
   });
 });
 
-document.getElementById("githubSignOut").addEventListener("click", () => {
+const githubSignOutButton = document.getElementById("githubSignOut");
+if (githubSignOutButton) githubSignOutButton.addEventListener("click", () => {
   sessionStorage.removeItem(GITHUB_TOKEN_STORAGE_KEY);
   githubToken = null;
   githubLogin = "";
-  document.getElementById("githubToken").value = "";
+  const tokenInput = document.getElementById("githubToken");
+  if (tokenInput) tokenInput.value = "";
   updateAuthControls();
   renderAll();
   showStatus("Disconnected from GitHub.", false);
