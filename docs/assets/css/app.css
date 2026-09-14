@@ -72,3 +72,9 @@
 .app-manage-row { align-items: center; border-bottom: 1px solid #eaecf0; display: flex; justify-content: space-between; gap: 0.75rem; padding: 0.55rem 0; }
 .app-manage-row button { background: #b42318; padding: 0.25rem 0.55rem; }
 @media (max-width: 560px) { .app-inline-form { flex-direction: column; } .app-section-heading { align-items: flex-start; flex-direction: column; gap: 0.25rem; } }
+
+body {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
+    url("/assets/images/background.jpeg") center / cover fixed;
+}
