@@ -59,6 +59,8 @@
 .app-store-item h2 { margin: 0.25rem 0; }
 .app-cart-list { list-style: none; margin: 0; padding: 0; }
 .app-cart-list li { align-items: center; border-bottom: 1px solid #eaecf0; display: flex; justify-content: space-between; gap: 1rem; padding: 0.75rem 0; }
+.app-cart-list li div { display: flex; flex-direction: column; gap: 0.2rem; }
+.app-cart-list li strong { color: #176b5b; font-size: 0.85rem; }
 .app-cart-list li:last-child { border-bottom: none; }
 .app-cart-list button, .app-secondary-button { background: #667085; }
 .app-cart-actions { display: flex; gap: 0.75rem; margin: 1rem 0; }

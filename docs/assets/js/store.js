@@ -44,7 +44,7 @@ async function loadStore() {
   document.getElementById("storeItems").innerHTML = prizes.map((prize) => `<article class="app-store-item"><img src="${storeImage(prize)}" alt="${escapeHtml(prize.name)}" onerror="this.onerror=null;this.src='${storeImageFallback}'"><div><p class="app-kicker">${escapeHtml(prize.category || "REWARD")}</p><h2>${escapeHtml(prize.name)}</h2><p>${prize.cost} Bozio Bucks</p><button type="button" data-prize-id="${prize.id}">Redeem</button></div></article>`).join("");
   document.querySelectorAll("#storeItems button").forEach((button) => button.addEventListener("click", () => {
     const prize = prizes.find((item) => item.id === button.dataset.prizeId);
-    addPendingAction("redeem", { childId: storeState.child.id, name: prize.name, cost: prize.cost }, `Redeem: ${prize.name}`);
+    addPendingAction("redeem", { childId: storeState.child.id, childName: storeState.child.name, name: prize.name, cost: prize.cost }, `Redeem: ${prize.name}`);
     button.disabled = true;
     button.textContent = "In cart";
     showStoreStatus(`${prize.name} added to cart.`, false);

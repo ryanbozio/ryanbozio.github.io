@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Child
+title: Child Overview
 permalink: /Child/
 ---
 

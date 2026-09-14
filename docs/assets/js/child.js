@@ -40,7 +40,7 @@ async function loadChild() {
   const current = children.find((child) => child.id === childId && (child.github_username || "").toLowerCase() === appSession().login);
   if (!current) throw new Error("That child is not available for this account.");
   childState = { children, chores, ledger };
-  document.getElementById("childHeading").innerHTML = `<p class="app-kicker">CHILD ACCOUNT</p><h1>${escapeHtml(current.name)}</h1>`;
+  document.getElementById("childHeading").innerHTML = `<p class="app-kicker">${escapeHtml(current.name)}'S ACCOUNT</p>`;
   const balance = computeBalances(ledger)[current.id] || 0;
   document.getElementById("childBalance").textContent = `${balance} Bozio Bucks 🎟️`;
   document.getElementById("childStoreLink").href = `/Store/?id=${encodeURIComponent(current.id)}`;
@@ -67,7 +67,7 @@ function choreImage(chore) {
 
 async function logChore(chore) {
   const current = childState.children.find((child) => child.id === childId);
-  addPendingAction("log_chore", { childId: current.id, description: chore.name, points: chore.points }, `Log chore: ${chore.name}`);
+  addPendingAction("log_chore", { childId: current.id, childName: current.name, description: chore.name, points: chore.points }, `Log chore: ${chore.name}`);
   showChildStatus("Chore added to cart.", false);
 }
 
@@ -85,7 +85,8 @@ document.getElementById("childPrizes").addEventListener("click", async (event) =
   const button = event.target.closest("button[data-use-prize-id]");
   if (!button) return;
   button.disabled = true;
-  addPendingAction("use_redemption", { childId, redemptionId: button.dataset.usePrizeId }, "Use redeemed prize");
+  const current = childState.children.find((child) => child.id === childId);
+  addPendingAction("use_redemption", { childId, childName: current.name, redemptionId: button.dataset.usePrizeId }, "Use redeemed prize");
   button.textContent = "In cart";
   showChildStatus("Prize use added to cart.", false);
 });
@@ -96,7 +97,7 @@ document.getElementById("childAdjustmentForm").addEventListener("submit", (event
   const points = parseInt(document.getElementById("childAdjustmentPoints").value, 10);
   const reason = document.getElementById("childAdjustmentReason").value.trim();
   if (!points || !reason) return;
-  addPendingAction("adjustment", { childId: current.id, reason, points }, `Adjustment: ${reason} (${points > 0 ? "+" : ""}${points} Bozio Bucks)`);
+  addPendingAction("adjustment", { childId: current.id, childName: current.name, reason, points }, `Adjustment: ${reason} (${points > 0 ? "+" : ""}${points} Bozio Bucks)`);
   document.getElementById("childAdjustmentForm").reset();
   showChildStatus("Adjustment added to cart.", false);
 });

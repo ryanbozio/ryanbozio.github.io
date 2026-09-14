@@ -2,6 +2,7 @@ const cartItems = document.getElementById("cartItems");
 const cartStatus = document.getElementById("cartStatus");
 const applyCartButton = document.getElementById("applyCart");
 const clearCartButton = document.getElementById("clearCart");
+let cartChildren = {};
 
 function showCartStatus(message, isError) {
   cartStatus.textContent = message;
@@ -12,8 +13,10 @@ function renderCart() {
   const actions = pendingCart();
   applyCartButton.disabled = actions.length === 0;
   clearCartButton.disabled = actions.length === 0;
+  const familyAction = (action) => action.action === "add_chore" || action.action === "add_prize";
+  const childName = (action) => action.payload.childName || cartChildren[action.payload.childId] || (familyAction(action) ? "Family" : "Unknown child");
   cartItems.innerHTML = actions.length
-    ? `<ol class="app-cart-list">${actions.map((action) => `<li><span>${escapeHtml(action.label)}</span><button type="button" class="app-remove-cart-item" data-action-id="${escapeHtml(action.id)}">Remove</button></li>`).join("")}</ol>`
+    ? `<ol class="app-cart-list">${actions.map((action) => `<li><div><strong>For: ${escapeHtml(childName(action))}</strong><span>${escapeHtml(action.label)}</span></div><button type="button" class="app-remove-cart-item" data-action-id="${escapeHtml(action.id)}">Remove</button></li>`).join("")}</ol>`
     : "<p class=\"app-muted\">Your cart is empty.</p>";
 }
 
@@ -45,4 +48,9 @@ applyCartButton.addEventListener("click", async () => {
 });
 
 window.addEventListener("storage", renderCart);
-renderCart();
+fetchCSV("/data/children.csv")
+  .then((children) => {
+    cartChildren = Object.fromEntries(children.map((child) => [child.id, child.name]));
+    renderCart();
+  })
+  .catch(() => renderCart());

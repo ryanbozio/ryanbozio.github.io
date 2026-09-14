@@ -188,7 +188,7 @@ function renderAll() {
     button.addEventListener("click", () => {
       addPendingAction(
         "use_redemption",
-        { childId: button.dataset.childId, redemptionId: button.dataset.redemptionId },
+        { childId: button.dataset.childId, redemptionId: button.dataset.redemptionId, childName: childrenById[button.dataset.childId]?.name || "Unknown child" },
         "Use redeemed prize"
       );
       button.disabled = true;
@@ -252,7 +252,7 @@ document.getElementById("addChoreForm").addEventListener("submit", async (e) => 
   const points = parseInt(document.getElementById("addChorePoints").value, 10);
   const category = document.getElementById("addChoreCategory").value;
   if (!name || Number.isNaN(points)) return;
-  addPendingAction("add_chore", { name, points, category }, `Add chore: ${name}`);
+  addPendingAction("add_chore", { name, points, category }, `Add chore: ${name}`, "Family");
   document.getElementById("addChoreForm").reset();
   showStatus("Chore added to cart.", false);
 });
@@ -263,7 +263,7 @@ document.getElementById("addPrizeForm").addEventListener("submit", async (e) => 
   const cost = parseInt(document.getElementById("addPrizeCost").value, 10);
   const category = document.getElementById("addPrizeCategory").value;
   if (!name || Number.isNaN(cost)) return;
-  addPendingAction("add_prize", { name, cost, category }, `Add prize: ${name}`);
+  addPendingAction("add_prize", { name, cost, category }, `Add prize: ${name}`, "Family");
   document.getElementById("addPrizeForm").reset();
   showStatus("Prize added to cart.", false);
 });
