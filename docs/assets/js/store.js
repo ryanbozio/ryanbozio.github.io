@@ -30,6 +30,32 @@ function storeBase64(text) {
   return btoa(String.fromCharCode(...new TextEncoder().encode(text)));
 }
 
+function projectedBalance() {
+  return pendingCart().reduce((balance, action) => {
+    if (action.payload.childId !== storeState.child.id) return balance;
+    if (action.action === "log_chore" || action.action === "adjustment") return balance + Number(action.payload.points || 0);
+    if (action.action === "redeem") return balance - Math.abs(Number(action.payload.cost || 0));
+    return balance;
+  }, computeBalances(storeState.ledger)[storeState.child.id] || 0);
+}
+
+function renderStoreItems(prizes) {
+  const balance = projectedBalance();
+  document.getElementById("storeItems").innerHTML = prizes.map((prize) => {
+    const cost = Math.abs(Number(prize.cost));
+    const queued = pendingCart().some((action) => action.action === "redeem" && action.payload.childId === storeState.child.id && action.payload.name === prize.name && Number(action.payload.cost) === Number(prize.cost));
+    const disabled = queued || balance < cost;
+    const buttonText = queued ? "In cart" : "Redeem";
+    return `<article class="app-store-item"><img src="${storeImage(prize)}" alt="${escapeHtml(prize.name)}" onerror="this.onerror=null;this.src='${storeImageFallback}'"><div><p class="app-kicker">${escapeHtml(prize.category || "REWARD")}</p><h2>${escapeHtml(prize.name)}</h2><p>${prize.cost} Bozio Bucks</p><button type="button" data-prize-id="${prize.id}"${disabled ? " disabled" : ""}>${buttonText}</button></div></article>`;
+  }).join("");
+  document.querySelectorAll("#storeItems button:not(:disabled)").forEach((button) => button.addEventListener("click", () => {
+    const prize = prizes.find((item) => item.id === button.dataset.prizeId);
+    addPendingAction("redeem", { childId: storeState.child.id, childName: storeState.child.name, name: prize.name, cost: prize.cost }, `Redeem: ${prize.name}`);
+    renderStoreItems(prizes);
+    showStoreStatus(`${prize.name} added to cart.`, false);
+  }));
+}
+
 async function loadStore() {
   const [children, prizes, ledger] = await Promise.all([fetchCSV("/data/children.csv"), fetchCSV("/data/prizes.csv"), fetchCSV("/data/ledger.csv")]);
   storeState.child = children.find((child) => child.id === childId && (child.github_username || "").toLowerCase() === appSession().login);
@@ -41,14 +67,7 @@ async function loadStore() {
   document.getElementById("storeChildLink").href = `/Child/?id=${encodeURIComponent(storeState.child.id)}`;
   document.getElementById("storeChildLink").textContent = `Back to ${storeState.child.name}`;
   document.getElementById("storeBalance").textContent = `${balance} Bozio Bucks available`;
-  document.getElementById("storeItems").innerHTML = prizes.map((prize) => `<article class="app-store-item"><img src="${storeImage(prize)}" alt="${escapeHtml(prize.name)}" onerror="this.onerror=null;this.src='${storeImageFallback}'"><div><p class="app-kicker">${escapeHtml(prize.category || "REWARD")}</p><h2>${escapeHtml(prize.name)}</h2><p>${prize.cost} Bozio Bucks</p><button type="button" data-prize-id="${prize.id}">Redeem</button></div></article>`).join("");
-  document.querySelectorAll("#storeItems button").forEach((button) => button.addEventListener("click", () => {
-    const prize = prizes.find((item) => item.id === button.dataset.prizeId);
-    addPendingAction("redeem", { childId: storeState.child.id, childName: storeState.child.name, name: prize.name, cost: prize.cost }, `Redeem: ${prize.name}`);
-    button.disabled = true;
-    button.textContent = "In cart";
-    showStoreStatus(`${prize.name} added to cart.`, false);
-  }));
+  renderStoreItems(prizes);
 }
 
 loadStore().catch((error) => showStoreStatus(error.message, true));

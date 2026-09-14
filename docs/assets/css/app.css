@@ -57,6 +57,7 @@
 .app-store-item img { display: block; height: 150px; object-fit: cover; width: 100%; }
 .app-store-item > div { padding: 1rem; }
 .app-store-item h2 { margin: 0.25rem 0; }
+.app-store-item button:disabled { background: #98a2b3; color: #fff; cursor: not-allowed; opacity: 0.85; }
 .app-cart-list { list-style: none; margin: 0; padding: 0; }
 .app-cart-list li { align-items: center; border-bottom: 1px solid #eaecf0; display: flex; justify-content: space-between; gap: 1rem; padding: 0.75rem 0; }
 .app-cart-list li div { display: flex; flex-direction: column; gap: 0.2rem; }
