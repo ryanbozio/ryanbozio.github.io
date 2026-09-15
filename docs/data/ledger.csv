@@ -5,3 +5,6 @@ id,timestamp,child_id,type,description,points
 44c10513,2026-09-14T22:14:25.577Z,f6d37306,adjustment,Good behavior at the store,2
 7eee1073,2026-09-14T22:38:48.688Z,f6d37306,adjustment,Screaming at dinner,-1
 0533883e,2026-09-14T22:48:37.432Z,2fca80bc,chore,Clean Room,2
+884c80dc,2026-09-15T00:50:26.273Z,f6d37306,chore,Clean Room,2
+577bd84e,2026-09-15T00:50:26.275Z,f6d37306,chore,Put Away Clean Laundry,1
+34730f47,2026-09-15T00:50:26.275Z,f6d37306,redemption,+15 min special time,-5
