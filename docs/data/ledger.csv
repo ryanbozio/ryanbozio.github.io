@@ -8,3 +8,6 @@ id,timestamp,child_id,type,description,points
 884c80dc,2026-09-15T00:50:26.273Z,f6d37306,chore,Clean Room,2
 577bd84e,2026-09-15T00:50:26.275Z,f6d37306,chore,Put Away Clean Laundry,1
 34730f47,2026-09-15T00:50:26.275Z,f6d37306,redemption,+15 min special time,-5
+fc880ea6,2026-09-16T00:24:20.465Z,f6d37306,adjustment,Good behavior at eye appointment,2
+8233da6b,2026-09-16T00:24:20.468Z,088b7b70,adjustment,Good behavior at eye appointment,2
+43beaf87,2026-09-16T00:24:20.468Z,2fca80bc,adjustment,Good behavior at eye appointment,2
